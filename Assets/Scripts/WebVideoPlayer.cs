@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Video;
 
 [RequireComponent(typeof(VideoPlayer))]
@@ -14,6 +15,10 @@ public class WebVideoPlayer : MonoBehaviour
     [Header("[ UI Setting ]")]
     [Tooltip("영상이 버퍼링/로딩 중일 때 띄워줄 UI 오브젝트")]
     public GameObject loadingIndicatorUI;
+
+    [Header("[ UI ]")]
+    [SerializeField] private RawImage rawImage;
+    private AspectRatioFitter aspectRatioFitter;
 
     private void Start()
     {
@@ -41,6 +46,16 @@ public class WebVideoPlayer : MonoBehaviour
         Debug.Log("스트리밍 준비 완료! 영화 재생을 시작합니다.");
 
         if (loadingIndicatorUI != null) loadingIndicatorUI.SetActive(false);
+
+        // 영상의 원본 가로, 세로 해상도(픽셀) 가져와 화면비 계산
+        float videoAspectRatio = source.width / source.height;
+
+        // RawImage의 AspectRatioFitter 컴포넌트를 찾아 비율 주입
+        if (aspectRatioFitter != null)
+        {
+            aspectRatioFitter = rawImage.GetComponent<AspectRatioFitter>();
+        }
+        aspectRatioFitter.aspectRatio = videoAspectRatio;
 
         source.Play();
     }
