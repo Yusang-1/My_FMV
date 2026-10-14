@@ -14,7 +14,7 @@ public class VideoPlayerPool : MonoBehaviour
         {
             return;
         }
-Debug.Log($"Find {wrappers.Length} Video Players");
+
         foreach (var wrapper in wrappers)
         {
             stack.Push(wrapper);

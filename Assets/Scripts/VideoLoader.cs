@@ -28,14 +28,13 @@ public class VideoLoader : MonoBehaviour
         videoPlayer.Prepare();
     }
 
-    private int tempCode = 0;
     private void OnVideoPrepared(VideoPlayer source)
     {
-        Debug.Log("스트리밍 준비 완료! 영화 재생을 시작합니다.");
-
         if (loadingIndicatorUI != null) loadingIndicatorUI.SetActive(false);
 
-        OnVideoPreparedEvent?.Invoke(source, tempCode);
+        int code = source.url.GetHashCode();
+        OnVideoPreparedEvent?.Invoke(source, code);
+        Debug.Log($"스트리밍 준비 완료!\n{source.url}");
 
         UnbindEvents(source);
     }

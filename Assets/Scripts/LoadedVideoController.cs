@@ -14,7 +14,6 @@ public class LoadedVideoController
         loadedPlayers.Add(code, videoPlayer);
     }
 
-
     /// <summary>
     /// url별로 구분할 수 있는 코드를 이용해 player반환
     /// </summary>

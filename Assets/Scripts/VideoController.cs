@@ -25,7 +25,6 @@ public class VideoController : MonoBehaviour
 
         if (pool.TryGetValue(out VideoPlayerWrapper wrapper))
         {
-            Debug.Log("Success Get VideoPlayer");
             loader.LoadVideo(wrapper.VideoPlayer, cloudFrontVideoUrl);
         }
     }
