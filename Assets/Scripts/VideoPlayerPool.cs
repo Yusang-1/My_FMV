@@ -1,0 +1,44 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+public class VideoPlayerPool : MonoBehaviour
+{
+    private readonly Stack<VideoPlayerWrapper> stack = new();
+
+    private void Start()
+    {
+        VideoPlayerWrapper[] wrappers =
+            FindObjectsByType<VideoPlayerWrapper>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+
+        if (wrappers == null || wrappers.Length == 0)
+        {
+            return;
+        }
+
+        foreach (var wrapper in wrappers)
+        {
+            stack.Push(wrapper);
+        }
+    }
+
+    public bool TryGetValue(out VideoPlayerWrapper videoPlayerWrapper)
+    {
+        if (stack == null || stack.Count == 0)
+        {
+            videoPlayerWrapper = null;
+            return false;
+        }
+
+        videoPlayerWrapper = stack.Pop();
+        videoPlayerWrapper.OnVideoPlayerUnused += ReturnToPool;
+                
+        return true;
+    }
+    
+    private void ReturnToPool(VideoPlayerWrapper value)
+    {        
+        stack.Push(value);
+        
+        value.OnVideoPlayerUnused -= ReturnToPool;
+    }
+}
