@@ -1,7 +1,6 @@
-using UnityEngine;
 using UnityEngine.Video;
 
-public class VideoPlayController : MonoBehaviour
+public class VideoPlayController
 {
     public void Play(VideoPlayer videoPlayer)
     {
