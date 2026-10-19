@@ -96,9 +96,6 @@ public class VideoController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 현재 videoPlayer가 끝날때
-    /// </summary>
     public void TestNextVideo()
     {
         string address = default;
@@ -106,52 +103,18 @@ public class VideoController : MonoBehaviour
         if (nodeContainer.TryGetNextNodeData(currentNode.Code, out NodeSO nextNode))
         {
             // preload
-            if (pool.TryGetValue(out VideoPlayerWrapper wrapper))
+            if (pool.TryGetValue(out VideoPlayerWrapper nextWrapper))
             {
                 address = nextNode.VideoAdress;
-                loader.LoadVideo(wrapper, address);
+                loader.LoadVideo(nextWrapper, address);
             }
 
-            StartCoroutine(WaitForCurrentPlayerFinished(address));
-        }
-    }
-
-    private IEnumerator WaitForCurrentPlayerFinished(string address)
-    {
-        bool isLoaded = false;
-        VideoPlayer newVideoPlayer = null;
-
-        while (!isLoaded)
-        {
-            isLoaded = loadedVideoController.TryGetLoadedPlayer(address.GetHashCode(), out newVideoPlayer);
-            if (isLoaded)
+            if (!pool.TryGetWrapper(currentVideoPlayer, out VideoPlayerWrapper currentWrapper))
             {
-                break;
+                return;
             }
 
-            yield return null;
-        }
-
-        while (true)
-        {
-            if (!currentVideoPlayer.isPlaying)
-            {
-                if (!pool.TryGetWrapper(currentVideoPlayer, out VideoPlayerWrapper currentWrapper))
-                {
-                    break;
-                }
-
-                currentVideoPlayer = newVideoPlayer;
-                if (!pool.TryGetWrapper(currentVideoPlayer, out VideoPlayerWrapper nextWrapper))
-                {
-                    break;
-                }
-
-                transition.Transition(currentWrapper, nextWrapper);
-
-                break;
-            }
-            yield return null;
+            transition.ReserveTransition(currentWrapper, nextWrapper);
         }
     }
 }

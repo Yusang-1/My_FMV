@@ -1,10 +1,26 @@
+using System.Collections;
+
 public class TransitionCut : ITransitionPolicy
 {
     public TransitionPolicyEnum PolicyEnum { get; private set; } = TransitionPolicyEnum.Cut;
-    
-    public void DoTransition(VideoPlayerWrapper prev, VideoPlayerWrapper next)
+
+    public IEnumerator WaitForTransition(VideoPlayerWrapper current, VideoPlayerWrapper next)
     {
-        prev.EndVideo();
+        while (true)
+        {
+            if (!current.VideoPlayer.isPlaying)
+            {
+                DoTransition(current, next);
+                break;
+            }
+
+            yield return null;
+        }
+    }
+
+    private void DoTransition(VideoPlayerWrapper current, VideoPlayerWrapper next)
+    {
+        current.EndVideo();
         next.PlayVideo();
     }
 }

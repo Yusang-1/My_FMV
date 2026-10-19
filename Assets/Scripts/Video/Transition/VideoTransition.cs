@@ -11,12 +11,10 @@ public class VideoTransition : MonoBehaviour
     {
         policyDict.Add(policyCut.PolicyEnum, policyCut);
     }
-    
-    public void Transition(VideoPlayerWrapper prev, VideoPlayerWrapper next, TransitionPolicyEnum policyEnum = TransitionPolicyEnum.Cut)
-    {
-        ITransitionPolicy policy = policyDict[policyEnum];
 
-        policy.DoTransition(prev, next);
+    public void ReserveTransition(VideoPlayerWrapper current, VideoPlayerWrapper next, TransitionPolicyEnum policyEnum = TransitionPolicyEnum.Cut)
+    {
+        StartCoroutine(policyDict[policyEnum].WaitForTransition(current, next));
     }
 }
 

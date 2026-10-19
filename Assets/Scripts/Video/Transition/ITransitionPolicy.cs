@@ -1,6 +1,6 @@
-using UnityEngine.Video;
+using System.Collections;
 
 public interface ITransitionPolicy
 {
-    public void DoTransition(VideoPlayerWrapper prev, VideoPlayerWrapper next);
+    public IEnumerator WaitForTransition(VideoPlayerWrapper current, VideoPlayerWrapper next);
 }
