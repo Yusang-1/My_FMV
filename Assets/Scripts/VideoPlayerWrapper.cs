@@ -10,7 +10,7 @@ public class VideoPlayerWrapper : MonoBehaviour
 
     public VideoPlayer VideoPlayer { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
         VideoPlayer = GetComponent<VideoPlayer>();
     }
