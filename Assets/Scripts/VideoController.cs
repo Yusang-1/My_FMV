@@ -1,6 +1,6 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Video;
+using System.Collections;
 
 public class VideoController : MonoBehaviour
 {
@@ -9,7 +9,8 @@ public class VideoController : MonoBehaviour
     [SerializeField] private VideoLoader loader;
     [SerializeField] private JudgePreLoadVideo judgePreLoad;
     [SerializeField] private LoadVideoRunTimeContext loadVideoRunTimeContext;
-    private readonly VideoPlayController controller = new();
+    [SerializeField] private VideoTransition transition;
+
     private readonly LoadedVideoController loadedVideoController = new();
 
     [Header("[ Node ]")]
@@ -63,7 +64,7 @@ public class VideoController : MonoBehaviour
         {
             if (nodeContainer.TryGetNodeData(0, out NodeSO node))
             {
-                
+
                 currentNode = node;
                 address = node.VideoAdress;
                 loader.LoadVideo(wrapper, address);
@@ -85,7 +86,7 @@ public class VideoController : MonoBehaviour
                 currentVideoPlayer = videoPlayer;
                 if (pool.TryGetWrapper(videoPlayer, out VideoPlayerWrapper wrapper))
                 {
-                    controller.Play(wrapper);
+                    wrapper.PlayVideo();
                 }
                 judgePreLoad.StartNewJudge(videoPlayer);
                 break;
@@ -133,19 +134,21 @@ public class VideoController : MonoBehaviour
 
         while (true)
         {
-            if (currentVideoPlayer.length - currentVideoPlayer.time <= 0.01f)
+            if (!currentVideoPlayer.isPlaying)
             {
-                if(pool.TryGetWrapper(currentVideoPlayer, out VideoPlayerWrapper currentWrapper))
+                if (!pool.TryGetWrapper(currentVideoPlayer, out VideoPlayerWrapper currentWrapper))
                 {
-                    controller.Stop(currentWrapper);                    
+                    break;
                 }
-                
+
                 currentVideoPlayer = newVideoPlayer;
-                if (pool.TryGetWrapper(currentVideoPlayer, out VideoPlayerWrapper wrapper))
+                if (!pool.TryGetWrapper(currentVideoPlayer, out VideoPlayerWrapper nextWrapper))
                 {
-                    controller.Play(wrapper);
+                    break;
                 }
-                judgePreLoad.StartNewJudge(currentVideoPlayer);
+
+                transition.Transition(currentWrapper, nextWrapper);
+
                 break;
             }
             yield return null;

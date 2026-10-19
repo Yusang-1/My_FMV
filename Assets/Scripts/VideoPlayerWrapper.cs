@@ -17,8 +17,6 @@ public class VideoPlayerWrapper : MonoBehaviour
 
     private void Start()
     {
-        VideoPlayer.loopPointReached += OnVideoEnd;
-        
         gameObject.SetActive(false);
     }
 
@@ -32,9 +30,17 @@ public class VideoPlayerWrapper : MonoBehaviour
         OnVideoPlayerUnused?.Invoke(this);
     }
     
-    void OnVideoEnd(VideoPlayer videoPlayer)
+    public void PlayVideo()
     {
-        videoPlayer.Stop();
+        Debug.Log("Play Video");
+        gameObject.SetActive(true);
+        VideoPlayer.Play();
+    }
+    
+    public void EndVideo()
+    {
+        Debug.Log("Stop Video");
+        VideoPlayer.Stop();
         gameObject.SetActive(false);
     }
 }
