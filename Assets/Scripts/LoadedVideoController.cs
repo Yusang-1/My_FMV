@@ -17,15 +17,15 @@ public class LoadedVideoController
     /// <summary>
     /// url별로 구분할 수 있는 코드를 이용해 player반환
     /// </summary>
-    public bool TryGetLoadedPlayer(int code, out VideoPlayer videoPlayer)
+    public bool TryGetLoadedPlayer(int code, out VideoPlayer videoPlayerWrapper)
     {
         if (loadedPlayers == null || !loadedPlayers.ContainsKey(code))
         {
-            videoPlayer = null;
+            videoPlayerWrapper = null;
             return false;
         }
 
-        videoPlayer = loadedPlayers[code];
+        videoPlayerWrapper = loadedPlayers[code];
         return true;
     }
 }

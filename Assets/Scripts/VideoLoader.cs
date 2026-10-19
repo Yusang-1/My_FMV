@@ -11,8 +11,11 @@ public class VideoLoader : MonoBehaviour
     [Tooltip("영상이 버퍼링/로딩 중일 때 띄워줄 UI 오브젝트")]
     [SerializeField] private GameObject loadingIndicatorUI;
 
-    public void LoadVideo(VideoPlayer videoPlayer, string url)
+    public void LoadVideo(VideoPlayerWrapper wrapper, string url)
     {
+        wrapper.gameObject.SetActive(true);
+        
+        VideoPlayer videoPlayer = wrapper.VideoPlayer;
         videoPlayer.source = VideoSource.Url;
         videoPlayer.url = url;
 
@@ -62,5 +65,5 @@ public class VideoLoader : MonoBehaviour
     {
         videoPlayer.prepareCompleted -= OnVideoPrepared;
         videoPlayer.errorReceived -= OnVideoError;
-    }
+    }    
 }

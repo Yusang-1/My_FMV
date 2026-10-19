@@ -258,6 +258,7 @@ MonoBehaviour:
   loader: {fileID: 209648386}
   judgePreLoad: {fileID: 209648385}
   loadVideoRunTimeContext: {fileID: 209648384}
+  nodeContainer: {fileID: 1038659467}
   cloudFrontVideoUrl: Https://d2vwjcp3kqcnox.cloudfront.net/Sarangbang_Sonnimgwa_Eomeoni(1961).mp4
   cloudFrontVideoUrl2: Https://d2vwjcp3kqcnox.cloudfront.net/The_Gold_Rush(1925).mp4
   cloudFrontShortVideoUrl1: Https://d2vwjcp3kqcnox.cloudfront.net/Nat-Landscape-1.mp4
@@ -880,6 +881,53 @@ RectTransform:
   m_AnchoredPosition: {x: -10, y: 10}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 1, y: 0}
+--- !u!1 &1038659466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1038659468}
+  - component: {fileID: 1038659467}
+  m_Layer: 0
+  m_Name: NodeController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1038659467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038659466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a61d6c937921a3a4bbe0caa8f65e6ba6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nodeDataList:
+  - {fileID: 11400000, guid: b14049f40955dbd4e9c29e0c94dc162e, type: 2}
+  - {fileID: 11400000, guid: 9bc0db8610b36e6479086065a68ebaa8, type: 2}
+--- !u!4 &1038659468
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038659466}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1235728485
 GameObject:
   m_ObjectHideFlags: 0
@@ -1027,7 +1075,7 @@ VideoPlayer:
   m_EnabledAudioTracks: 01
   m_DirectAudioMutes: 00
   m_ControlledAudioTrackCount: 1
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
   m_WaitForFirstFrame: 1
@@ -1113,7 +1161,7 @@ VideoPlayer:
   m_EnabledAudioTracks: 01
   m_DirectAudioMutes: 00
   m_ControlledAudioTrackCount: 1
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
   m_WaitForFirstFrame: 1
@@ -1226,5 +1274,6 @@ SceneRoots:
   - {fileID: 619394802}
   - {fileID: 567449926}
   - {fileID: 209648383}
+  - {fileID: 1038659468}
   - {fileID: 1235728488}
   - {fileID: 678698015}

@@ -1,9 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Video;
 
 public class VideoPlayerPool : MonoBehaviour
 {
     private readonly Stack<VideoPlayerWrapper> stack = new();
+    private readonly Dictionary<VideoPlayer, VideoPlayerWrapper> wrapperDict = new();
 
     private void Awake()
     {
@@ -21,6 +23,16 @@ public class VideoPlayerPool : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        foreach (var wrapper in stack)
+        {
+            if (wrapperDict.ContainsKey(wrapper.VideoPlayer)) continue;
+
+            wrapperDict.Add(wrapper.VideoPlayer, wrapper);
+        }
+    }
+
     public bool TryGetValue(out VideoPlayerWrapper videoPlayerWrapper)
     {
         if (stack == null || stack.Count == 0)
@@ -33,6 +45,18 @@ public class VideoPlayerPool : MonoBehaviour
         videoPlayerWrapper.OnVideoPlayerUnused += ReturnToPool;
         videoPlayerWrapper.UseVideoPlayer();
 
+        return true;
+    }
+
+    public bool TryGetWrapper(VideoPlayer videoPlayer, out VideoPlayerWrapper wrapper)
+    {
+        if (!wrapperDict.ContainsKey(videoPlayer))
+        {
+            wrapper = null;
+            return false;
+        }
+
+        wrapper = wrapperDict[videoPlayer];
         return true;
     }
 

@@ -12,7 +12,14 @@ public class VideoPlayerWrapper : MonoBehaviour
 
     private void Awake()
     {
-        VideoPlayer = GetComponent<VideoPlayer>();
+        VideoPlayer = GetComponent<VideoPlayer>();        
+    }
+
+    private void Start()
+    {
+        VideoPlayer.loopPointReached += OnVideoEnd;
+        
+        gameObject.SetActive(false);
     }
 
     public void UseVideoPlayer()
@@ -23,5 +30,11 @@ public class VideoPlayerWrapper : MonoBehaviour
     public void UnuseVideoPlayer()
     {
         OnVideoPlayerUnused?.Invoke(this);
+    }
+    
+    void OnVideoEnd(VideoPlayer videoPlayer)
+    {
+        videoPlayer.Stop();
+        gameObject.SetActive(false);
     }
 }

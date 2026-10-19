@@ -4,12 +4,16 @@ using UnityEngine.Video;
 
 public class VideoController : MonoBehaviour
 {
+    [Header("[ Video ]")]
     [SerializeField] private VideoPlayerPool pool;
     [SerializeField] private VideoLoader loader;
     [SerializeField] private JudgePreLoadVideo judgePreLoad;
     [SerializeField] private LoadVideoRunTimeContext loadVideoRunTimeContext;
     private readonly VideoPlayController controller = new();
     private readonly LoadedVideoController loadedVideoController = new();
+
+    [Header("[ Node ]")]
+    [SerializeField] private NodeContainer nodeContainer;
 
     [Header("[ AWS CloudFront Setting ]")] // https://[CloudFront 도메인 이름]/[S3에 올린 파일명]    
     public string cloudFrontVideoUrl = "Https://d2vwjcp3kqcnox.cloudfront.net/Sarangbang_Sonnimgwa_Eomeoni(1961).mp4";
@@ -37,37 +41,114 @@ public class VideoController : MonoBehaviour
     {
         loader.OnVideoPreparedEvent += loadedVideoController.AddLoadedVideo;
         // loader.OnErrorOccurred += ;
+
+        judgePreLoad.OnPreLoadRequired += TestNextVideo;
     }
 
     private void UnbindEvents()
     {
         loader.OnVideoPreparedEvent -= loadedVideoController.AddLoadedVideo;
         // loader.OnErrorOccurred -= ;
+
+        judgePreLoad.OnPreLoadRequired -= TestNextVideo;
     }
 
+    private NodeSO currentNode;
+    private VideoPlayer currentVideoPlayer;
     public void TestStart()
     {
+        string address = default;
+
         if (pool.TryGetValue(out VideoPlayerWrapper wrapper))
         {
-            loader.LoadVideo(wrapper.VideoPlayer, cloudFrontShortVideoUrl1);
+            if (nodeContainer.TryGetNodeData(0, out NodeSO node))
+            {
+                
+                currentNode = node;
+                address = node.VideoAdress;
+                loader.LoadVideo(wrapper, address);
+            }
         }
 
-        StartCoroutine(Test());
+        StartCoroutine(Test(address));
     }
 
-    private IEnumerator Test()
+    private IEnumerator Test(string address)
     {
         bool isLoaded = false;
 
         while (!isLoaded)
         {
-            isLoaded = loadedVideoController.TryGetLoadedPlayer(cloudFrontShortVideoUrl1.GetHashCode(), out VideoPlayer videoPlayer);
+            isLoaded = loadedVideoController.TryGetLoadedPlayer(address.GetHashCode(), out VideoPlayer videoPlayer);
             if (isLoaded)
             {
-                controller.Play(videoPlayer);                
+                currentVideoPlayer = videoPlayer;
+                if (pool.TryGetWrapper(videoPlayer, out VideoPlayerWrapper wrapper))
+                {
+                    controller.Play(wrapper);
+                }
+                judgePreLoad.StartNewJudge(videoPlayer);
+                break;
             }
 
-            yield return false;
+            yield return null;
+        }
+    }
+
+    /// <summary>
+    /// 현재 videoPlayer가 끝날때
+    /// </summary>
+    public void TestNextVideo()
+    {
+        string address = default;
+
+        if (nodeContainer.TryGetNextNodeData(currentNode.Code, out NodeSO nextNode))
+        {
+            // preload
+            if (pool.TryGetValue(out VideoPlayerWrapper wrapper))
+            {
+                address = nextNode.VideoAdress;
+                loader.LoadVideo(wrapper, address);
+            }
+
+            StartCoroutine(WaitForCurrentPlayerFinished(address));
+        }
+    }
+
+    private IEnumerator WaitForCurrentPlayerFinished(string address)
+    {
+        bool isLoaded = false;
+        VideoPlayer newVideoPlayer = null;
+
+        while (!isLoaded)
+        {
+            isLoaded = loadedVideoController.TryGetLoadedPlayer(address.GetHashCode(), out newVideoPlayer);
+            if (isLoaded)
+            {
+                break;
+            }
+
+            yield return null;
+        }
+
+        while (true)
+        {
+            if (currentVideoPlayer.length - currentVideoPlayer.time <= 0.01f)
+            {
+                if(pool.TryGetWrapper(currentVideoPlayer, out VideoPlayerWrapper currentWrapper))
+                {
+                    controller.Stop(currentWrapper);                    
+                }
+                
+                currentVideoPlayer = newVideoPlayer;
+                if (pool.TryGetWrapper(currentVideoPlayer, out VideoPlayerWrapper wrapper))
+                {
+                    controller.Play(wrapper);
+                }
+                judgePreLoad.StartNewJudge(currentVideoPlayer);
+                break;
+            }
+            yield return null;
         }
     }
 }
