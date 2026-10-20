@@ -16,12 +16,13 @@ public class VideoTransition : MonoBehaviour
         policyDict.Add(policyFade.PolicyEnum, policyFade);
     }
 
-    public void ReserveTransition(VideoPlayerWrapper current, VideoPlayerWrapper next, TransitionPolicyEnum policyEnum = TransitionPolicyEnum.Cut)
-    {        
-        ITransitionPolicy policy = policyDict[TransitionPolicyEnum.Fade];
-        TransitionFadeData transitionDissolve = new(current, next, 3);
+    public void ReserveTransition(VideoPlayerWrapper current, VideoPlayerWrapper next,
+        TransitionPolicyEnum policyEnum, TransitionData transitionData)
+    {
+        ITransitionPolicy policy = policyDict[policyEnum];
 
-        StartCoroutine(policy.WaitForTransition(transitionDissolve));
+        transitionData.SetData(current, next);
+        StartCoroutine(policy.WaitForTransition(transitionData));
     }
 }
 

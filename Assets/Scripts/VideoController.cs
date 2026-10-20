@@ -114,7 +114,7 @@ public class VideoController : MonoBehaviour
                 return;
             }
 
-            transition.ReserveTransition(currentWrapper, nextWrapper);
+            transition.ReserveTransition(currentWrapper, nextWrapper, currentNode.NextNodes[0].TransitionType, currentNode.NextNodes[0].TransitionData);
         }
     }
 }

@@ -15,4 +15,6 @@ MonoBehaviour:
   Code: 0
   VideoAdress: Https://d2vwjcp3kqcnox.cloudfront.net/Nat-Landscape-1.mp4
   VideoType: 0
-  NextCode: 1
+  NextNodes:
+  - NextCode: 1
+    TransitionType: 1

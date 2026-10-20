@@ -1,5 +1,7 @@
 using UnityEngine;
+using System;
 
+[Serializable]
 public class TransitionData
 {
     public VideoPlayerWrapper Current { get; private set; }
@@ -12,12 +14,21 @@ public class TransitionData
     }
 }
 
+[Serializable]
 public class TransitionCutData : TransitionData
 {
-    public TransitionCutData(VideoPlayerWrapper current, VideoPlayerWrapper next)
+    public override void SetData(VideoPlayerWrapper current, VideoPlayerWrapper next)
     {
-        SetData(current, next);
+        base.SetData(current, next);
     }
+}
+
+[Serializable]
+public class TransitionDissolveData : TransitionData
+{
+    [SerializeField] private float time = 3f;
+
+    public float Time => time;
 
     public override void SetData(VideoPlayerWrapper current, VideoPlayerWrapper next)
     {
@@ -25,34 +36,15 @@ public class TransitionCutData : TransitionData
     }
 }
 
-public class TransitionDissolveData : TransitionData
-{
-    public float Time { get; private set; }
-
-    public TransitionDissolveData(VideoPlayerWrapper current, VideoPlayerWrapper next, float time)
-    {
-        SetData(current, next, time);
-    }
-
-    public void SetData(VideoPlayerWrapper current, VideoPlayerWrapper next, float time)
-    {
-        base.SetData(current, next);
-        Time = time;
-    }
-}
-
+[Serializable]
 public class TransitionFadeData : TransitionData
 {
-    public float Time { get; private set; }
+    [SerializeField] private float time = 3f;
 
-    public TransitionFadeData(VideoPlayerWrapper current, VideoPlayerWrapper next, float time)
-    {
-        SetData(current, next, time);
-    }
+    public float Time => time;
 
-    public void SetData(VideoPlayerWrapper current, VideoPlayerWrapper next, float time)
+    public override void SetData(VideoPlayerWrapper current, VideoPlayerWrapper next)
     {
         base.SetData(current, next);
-        Time = time;
     }
 }

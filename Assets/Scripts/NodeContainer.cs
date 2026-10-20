@@ -38,7 +38,7 @@ public class NodeContainer : MonoBehaviour
             return false;
         }
 
-        int nextCode = nodeDataDict[currentNodeCode].NextCode;
+        int nextCode = nodeDataDict[currentNodeCode].NextNodes[0].NextCode;
         if (!nodeDataDict.ContainsKey(nextCode))
         {
             nextNode = null;
