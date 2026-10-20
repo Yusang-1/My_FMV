@@ -6,8 +6,8 @@ public class TransitionCut : ITransitionPolicy
 
     public IEnumerator WaitForTransition(TransitionData transitionData)
     {
-        VideoPlayerWrapper current = (transitionData as TransitionCutData).Current;
-        VideoPlayerWrapper next = (transitionData as TransitionCutData).Next;
+        VideoPlayerWrapper current = transitionData.Current;
+        VideoPlayerWrapper next = transitionData.Next;
 
         while (true)
         {

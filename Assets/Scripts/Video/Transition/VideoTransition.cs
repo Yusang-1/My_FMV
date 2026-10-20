@@ -4,19 +4,23 @@ using System.Collections.Generic;
 public class VideoTransition : MonoBehaviour
 {
     private readonly TransitionCut policyCut = new();
+    private readonly TransitionDissolve policyDissolve = new();
 
     private readonly Dictionary<TransitionPolicyEnum, ITransitionPolicy> policyDict = new();
 
     private void Start()
     {
         policyDict.Add(policyCut.PolicyEnum, policyCut);
+        policyDict.Add(policyDissolve.PolicyEnum, policyDissolve);
     }
 
     public void ReserveTransition(VideoPlayerWrapper current, VideoPlayerWrapper next, TransitionPolicyEnum policyEnum = TransitionPolicyEnum.Cut)
     {
-        TransitionCutData transitionCutData = new(current, next);
+        // TransitionCutData transitionCutData = new(current, next);
+        ITransitionPolicy policy = policyDict[TransitionPolicyEnum.Dissolve];
+        TransitionDissolveData transitionDissolve = new(current, next, 3);
 
-        StartCoroutine(policyDict[policyEnum].WaitForTransition(transitionCutData));
+        StartCoroutine(policy.WaitForTransition(transitionDissolve));
     }
 }
 

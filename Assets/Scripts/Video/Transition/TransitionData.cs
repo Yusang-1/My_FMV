@@ -24,3 +24,19 @@ public class TransitionCutData : TransitionData
         base.SetData(current, next);
     }
 }
+
+public class TransitionDissolveData : TransitionData
+{
+    public float Time { get; private set; }
+
+    public TransitionDissolveData(VideoPlayerWrapper current, VideoPlayerWrapper next, float time)
+    {
+        SetData(current, next, time);
+    }
+
+    public void SetData(VideoPlayerWrapper current, VideoPlayerWrapper next, float time)
+    {
+        base.SetData(current, next);
+        Time = time;
+    }
+}
