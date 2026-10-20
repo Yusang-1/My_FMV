@@ -36,6 +36,11 @@ public class VideoPlayerWrapper : MonoBehaviour
     {
         OnVideoPlayerUnused?.Invoke(this);
     }
+    
+    public void ActiveVideo()
+    {
+        gameObject.SetActive(true);
+    }
 
     public void PlayVideo()
     {
@@ -49,6 +54,25 @@ public class VideoPlayerWrapper : MonoBehaviour
         Debug.Log("Stop Video");
         VideoPlayer.Stop();
         gameObject.SetActive(false);
+    }
+    
+    public void SetColor(float value)
+    {
+        Color color = rawImage.color;
+        color.r = value;
+        color.g = value;
+        color.b = value;
+        rawImage.color = color;
+    }
+    
+    public void SetColor(float r, float g, float b, float a = 1)
+    {
+        Color color = rawImage.color;
+        color.r = r;
+        color.g = g;
+        color.b = b;
+        color.a = a;
+        rawImage.color = color;
     }
 
     public void SetAlpha(float value)

@@ -5,6 +5,7 @@ public class VideoTransition : MonoBehaviour
 {
     private readonly TransitionCut policyCut = new();
     private readonly TransitionDissolve policyDissolve = new();
+    private readonly TransitionFade policyFade = new();
 
     private readonly Dictionary<TransitionPolicyEnum, ITransitionPolicy> policyDict = new();
 
@@ -12,13 +13,13 @@ public class VideoTransition : MonoBehaviour
     {
         policyDict.Add(policyCut.PolicyEnum, policyCut);
         policyDict.Add(policyDissolve.PolicyEnum, policyDissolve);
+        policyDict.Add(policyFade.PolicyEnum, policyFade);
     }
 
     public void ReserveTransition(VideoPlayerWrapper current, VideoPlayerWrapper next, TransitionPolicyEnum policyEnum = TransitionPolicyEnum.Cut)
-    {
-        // TransitionCutData transitionCutData = new(current, next);
-        ITransitionPolicy policy = policyDict[TransitionPolicyEnum.Dissolve];
-        TransitionDissolveData transitionDissolve = new(current, next, 3);
+    {        
+        ITransitionPolicy policy = policyDict[TransitionPolicyEnum.Fade];
+        TransitionFadeData transitionDissolve = new(current, next, 3);
 
         StartCoroutine(policy.WaitForTransition(transitionDissolve));
     }

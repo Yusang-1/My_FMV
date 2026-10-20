@@ -40,3 +40,19 @@ public class TransitionDissolveData : TransitionData
         Time = time;
     }
 }
+
+public class TransitionFadeData : TransitionData
+{
+    public float Time { get; private set; }
+
+    public TransitionFadeData(VideoPlayerWrapper current, VideoPlayerWrapper next, float time)
+    {
+        SetData(current, next, time);
+    }
+
+    public void SetData(VideoPlayerWrapper current, VideoPlayerWrapper next, float time)
+    {
+        base.SetData(current, next);
+        Time = time;
+    }
+}
