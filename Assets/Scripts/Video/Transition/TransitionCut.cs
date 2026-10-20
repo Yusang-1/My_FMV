@@ -4,8 +4,11 @@ public class TransitionCut : ITransitionPolicy
 {
     public TransitionPolicyEnum PolicyEnum { get; private set; } = TransitionPolicyEnum.Cut;
 
-    public IEnumerator WaitForTransition(VideoPlayerWrapper current, VideoPlayerWrapper next)
+    public IEnumerator WaitForTransition(TransitionData transitionData)
     {
+        VideoPlayerWrapper current = (transitionData as TransitionCutData).Current;
+        VideoPlayerWrapper next = (transitionData as TransitionCutData).Next;
+
         while (true)
         {
             if (!current.VideoPlayer.isPlaying)

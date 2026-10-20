@@ -14,7 +14,9 @@ public class VideoTransition : MonoBehaviour
 
     public void ReserveTransition(VideoPlayerWrapper current, VideoPlayerWrapper next, TransitionPolicyEnum policyEnum = TransitionPolicyEnum.Cut)
     {
-        StartCoroutine(policyDict[policyEnum].WaitForTransition(current, next));
+        TransitionCutData transitionCutData = new(current, next);
+
+        StartCoroutine(policyDict[policyEnum].WaitForTransition(transitionCutData));
     }
 }
 
