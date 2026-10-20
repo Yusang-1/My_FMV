@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Video;
 using System;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(VideoPlayer))]
 public class VideoPlayerWrapper : MonoBehaviour
@@ -9,10 +10,11 @@ public class VideoPlayerWrapper : MonoBehaviour
     public event Action<VideoPlayerWrapper> OnVideoPlayerUnused;
 
     public VideoPlayer VideoPlayer { get; private set; }
+    [SerializeField] private RawImage rawImage;
 
     private void Awake()
     {
-        VideoPlayer = GetComponent<VideoPlayer>();        
+        VideoPlayer = GetComponent<VideoPlayer>();
     }
 
     private void Start()
@@ -29,18 +31,25 @@ public class VideoPlayerWrapper : MonoBehaviour
     {
         OnVideoPlayerUnused?.Invoke(this);
     }
-    
+
     public void PlayVideo()
     {
         Debug.Log("Play Video");
         gameObject.SetActive(true);
         VideoPlayer.Play();
     }
-    
+
     public void EndVideo()
     {
         Debug.Log("Stop Video");
         VideoPlayer.Stop();
         gameObject.SetActive(false);
+    }
+
+    public void SetAlpha(float value)
+    {
+        Color color = rawImage.color;
+        color.a = value;
+        rawImage.color = color;
     }
 }
