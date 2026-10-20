@@ -22,6 +22,11 @@ public class VideoPlayerWrapper : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    private void OnDisable()
+    {
+        ReleaseTexture();
+    }
+
     public void UseVideoPlayer()
     {
         OnVideoPlayerUsed?.Invoke();
@@ -51,5 +56,10 @@ public class VideoPlayerWrapper : MonoBehaviour
         Color color = rawImage.color;
         color.a = value;
         rawImage.color = color;
+    }
+
+    private void ReleaseTexture()
+    {
+        VideoPlayer.targetTexture.Release();
     }
 }
