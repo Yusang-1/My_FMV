@@ -14,6 +14,9 @@ public class NodeSO : ScriptableObject
 public struct NextNode
 {
     public int NextCode;
+    
+    public PlayerConditionEnum[] Conditions;
+    
     public TransitionPolicyEnum TransitionType;
     
     [SerializeReference]

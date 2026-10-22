@@ -11,9 +11,13 @@ public class NextNodeDrawer : PropertyDrawer
     {
         SerializedProperty transitionType = property.FindPropertyRelative(nameof(NextNode.TransitionType));
         SerializedProperty transitionData = property.FindPropertyRelative(nameof(NextNode.TransitionData));
+        SerializedProperty conditions = property.FindPropertyRelative(nameof(NextNode.Conditions));
         float lineHeight = EditorGUIUtility.singleLineHeight;
 
-        float height = (lineHeight + Spacing) * 2f;
+        float height = lineHeight + Spacing
+            + EditorGUI.GetPropertyHeight(conditions, true)
+            + Spacing
+            + lineHeight + Spacing;
         if (CreateTransitionData((TransitionPolicyEnum)transitionType.intValue) == null)
         {
             return height + lineHeight * 2f;
@@ -44,11 +48,17 @@ public class NextNodeDrawer : PropertyDrawer
         Rect fieldRect = new Rect(position.x, position.y, position.width, lineHeight);
 
         SerializedProperty nextCode = property.FindPropertyRelative(nameof(NextNode.NextCode));
+        SerializedProperty conditions = property.FindPropertyRelative(nameof(NextNode.Conditions));
         SerializedProperty transitionType = property.FindPropertyRelative(nameof(NextNode.TransitionType));
         SerializedProperty transitionData = property.FindPropertyRelative(nameof(NextNode.TransitionData));
 
         EditorGUI.PropertyField(fieldRect, nextCode);
         fieldRect.y += lineHeight + Spacing;
+
+        fieldRect.height = EditorGUI.GetPropertyHeight(conditions, true);
+        EditorGUI.PropertyField(fieldRect, conditions, true);
+        fieldRect.y += fieldRect.height + Spacing;
+        fieldRect.height = lineHeight;
 
         int previousPolicy = transitionType.intValue;
         EditorGUI.PropertyField(fieldRect, transitionType);
