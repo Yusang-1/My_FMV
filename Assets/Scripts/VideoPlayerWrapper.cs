@@ -1,7 +1,7 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Video;
 using System;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(VideoPlayer))]
 public class VideoPlayerWrapper : MonoBehaviour
@@ -54,6 +54,7 @@ public class VideoPlayerWrapper : MonoBehaviour
         Debug.Log("Stop Video");
         VideoPlayer.Stop();
         gameObject.SetActive(false);
+        UnuseVideoPlayer();
     }
     
     public void SetColor(float value)

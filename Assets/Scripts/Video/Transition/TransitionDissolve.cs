@@ -1,10 +1,17 @@
 using UnityEngine;
-using System.Collections;
 using UnityEngine.Video;
+using System.Collections;
 
 public class TransitionDissolve : ITransitionPolicy
 {
+    private readonly VideoPlayController videoPlayController;
+
     public TransitionPolicyEnum PolicyEnum { get; private set; } = TransitionPolicyEnum.Dissolve;
+
+    public TransitionDissolve(VideoPlayController videoPlayController)
+    {
+        this.videoPlayController = videoPlayController;
+    }
 
     public IEnumerator WaitForTransition(TransitionData transitionData)
     {
@@ -25,7 +32,7 @@ public class TransitionDissolve : ITransitionPolicy
         StartDissolve(next);
         float currentTime = 0;
         while (currentPlayer.isPlaying)
-        {            
+        {
             DoTransition(current, next, time, currentTime);
 
             currentTime += Time.deltaTime;
@@ -38,7 +45,7 @@ public class TransitionDissolve : ITransitionPolicy
     {
         // next의 alpha를 0으로
         next.SetAlpha(0);
-        next.PlayVideo();
+        videoPlayController.PlayLoadedVideo(next.VideoPlayer.url);
     }
 
     private void DoTransition(VideoPlayerWrapper current, VideoPlayerWrapper next, float totalTime, float currentTime)

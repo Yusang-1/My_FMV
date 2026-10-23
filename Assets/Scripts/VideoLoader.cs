@@ -14,7 +14,7 @@ public class VideoLoader : MonoBehaviour
     public void LoadVideo(VideoPlayerWrapper wrapper, string url)
     {
         wrapper.gameObject.SetActive(true);
-        
+
         VideoPlayer videoPlayer = wrapper.VideoPlayer;
         videoPlayer.source = VideoSource.Url;
         videoPlayer.url = url;
@@ -65,5 +65,5 @@ public class VideoLoader : MonoBehaviour
     {
         videoPlayer.prepareCompleted -= OnVideoPrepared;
         videoPlayer.errorReceived -= OnVideoError;
-    }    
+    }
 }

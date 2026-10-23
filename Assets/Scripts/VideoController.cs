@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.Video;
-using System.Collections;
 
 public class VideoController : MonoBehaviour
 {
@@ -8,9 +6,10 @@ public class VideoController : MonoBehaviour
     [SerializeField] private VideoPlayerPool pool;
     [SerializeField] private VideoLoader loader;
     [SerializeField] private JudgePreLoadVideo judgePreLoad;
-    [SerializeField] private LoadVideoRunTimeContext loadVideoRunTimeContext;
     [SerializeField] private VideoTransition transition;
     [SerializeField] private BranchController branchController;
+    [SerializeField] private VideoPlayController videoPlayController;
+    [SerializeField] private LoadVideoRunTimeContext loadVideoRunTimeContext;
 
     private readonly LoadedVideoController loadedVideoController = new();
 
@@ -29,6 +28,8 @@ public class VideoController : MonoBehaviour
     private void Start()
     {
         judgePreLoad.Initialize(loadVideoRunTimeContext);
+        transition.Initialize(videoPlayController);
+        videoPlayController.Initialize(pool, loader, judgePreLoad, transition, branchController, loadedVideoController);
     }
 
     private void OnDisable()
@@ -39,76 +40,30 @@ public class VideoController : MonoBehaviour
     private void BindEvents()
     {
         loader.OnVideoPreparedEvent += loadedVideoController.AddLoadedVideo;
-        // loader.OnErrorOccurred += ;
 
-        judgePreLoad.OnPreLoadRequired += TestNextVideo;
+        judgePreLoad.OnPreLoadRequired += videoPlayController.ReserveNextVideo;
     }
 
     private void UnbindEvents()
     {
         loader.OnVideoPreparedEvent -= loadedVideoController.AddLoadedVideo;
-        // loader.OnErrorOccurred -= ;
 
-        judgePreLoad.OnPreLoadRequired -= TestNextVideo;
+        judgePreLoad.OnPreLoadRequired -= videoPlayController.ReserveNextVideo;
     }
-
-    private NodeSO currentNode;
-    private VideoPlayer currentVideoPlayer;
-    public void TestStart()
+    
+    public void OnPlay()
     {
         string address = default;
-
+        
         if (pool.TryGetValue(out VideoPlayerWrapper wrapper))
         {
-            currentNode = branchController.GetStartNode();
-            if (currentNode == null) return;
+            NodeSO node = branchController.GetStartNode();
+            if (node == null) return;
 
-            address = currentNode.VideoAdress;
+            address = node.VideoAdress;
             loader.LoadVideo(wrapper, address);
         }
-
-        StartCoroutine(Test(address));
-    }
-
-    private IEnumerator Test(string address)
-    {
-        bool isLoaded = false;
-
-        while (!isLoaded)
-        {
-            isLoaded = loadedVideoController.TryGetLoadedPlayer(address.GetHashCode(), out VideoPlayer videoPlayer);
-            if (isLoaded)
-            {
-                currentVideoPlayer = videoPlayer;
-                if (pool.TryGetWrapper(videoPlayer, out VideoPlayerWrapper wrapper))
-                {
-                    wrapper.PlayVideo();
-                }
-                judgePreLoad.StartNewJudge(videoPlayer);
-                break;
-            }
-
-            yield return null;
-        }
-    }
-
-    public void TestNextVideo()
-    {
-        if (branchController.TryGetNextNode(out NodeSO nextNode))
-        {
-            // preload
-            if (pool.TryGetValue(out VideoPlayerWrapper nextWrapper))
-            {
-                string address = nextNode.VideoAdress;
-                loader.LoadVideo(nextWrapper, address);
-            }
-
-            if (!pool.TryGetWrapper(currentVideoPlayer, out VideoPlayerWrapper currentWrapper))
-            {
-                return;
-            }
-
-            transition.ReserveTransition(currentWrapper, nextWrapper, currentNode.NextNodes[0].TransitionType, currentNode.NextNodes[0].TransitionData);
-        }
+        
+        videoPlayController.PlayLoadedVideo(address);
     }
 }

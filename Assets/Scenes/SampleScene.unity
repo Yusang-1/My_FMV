@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 209648385}
   - component: {fileID: 209648384}
   - component: {fileID: 209648389}
+  - component: {fileID: 209648390}
   m_Layer: 0
   m_Name: Video Controller
   m_TagString: Untagged
@@ -258,9 +259,10 @@ MonoBehaviour:
   pool: {fileID: 209648387}
   loader: {fileID: 209648386}
   judgePreLoad: {fileID: 209648385}
-  loadVideoRunTimeContext: {fileID: 209648384}
   transition: {fileID: 209648389}
   branchController: {fileID: 1168360080}
+  videoPlayController: {fileID: 209648390}
+  loadVideoRunTimeContext: {fileID: 209648384}
   cloudFrontVideoUrl: Https://d2vwjcp3kqcnox.cloudfront.net/Sarangbang_Sonnimgwa_Eomeoni(1961).mp4
   cloudFrontVideoUrl2: Https://d2vwjcp3kqcnox.cloudfront.net/The_Gold_Rush(1925).mp4
   cloudFrontShortVideoUrl1: Https://d2vwjcp3kqcnox.cloudfront.net/Nat-Landscape-1.mp4
@@ -276,6 +278,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 24d1f61ccdf58c34e9a05d47b3e43983, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &209648390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 209648380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8acf8cb453631b4458b10bc53ec57d57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &519420028

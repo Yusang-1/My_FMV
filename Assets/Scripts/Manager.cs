@@ -17,11 +17,11 @@ public class Manager : MonoBehaviour
 
     private void BindEvents()
     {
-        uIController.OnTestStartRequested += videoController.TestStart;
+        uIController.OnTestStartRequested += videoController.OnPlay;
     }
 
     private void UnbindEvents()
     {
-        uIController.OnTestStartRequested -= videoController.TestStart;
+        uIController.OnTestStartRequested -= videoController.OnPlay;
     }
 }

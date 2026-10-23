@@ -3,14 +3,18 @@ using System.Collections.Generic;
 
 public class VideoTransition : MonoBehaviour
 {
-    private readonly TransitionCut policyCut = new();
-    private readonly TransitionDissolve policyDissolve = new();
-    private readonly TransitionFade policyFade = new();
+    private TransitionCut policyCut;
+    private TransitionDissolve policyDissolve;
+    private TransitionFade policyFade;
 
     private readonly Dictionary<TransitionPolicyEnum, ITransitionPolicy> policyDict = new();
-
-    private void Start()
+    
+    public void Initialize(VideoPlayController videoPlayController)
     {
+        policyCut = new TransitionCut(videoPlayController);
+        policyDissolve = new TransitionDissolve(videoPlayController);
+        policyFade = new TransitionFade(videoPlayController);
+        
         policyDict.Add(policyCut.PolicyEnum, policyCut);
         policyDict.Add(policyDissolve.PolicyEnum, policyDissolve);
         policyDict.Add(policyFade.PolicyEnum, policyFade);

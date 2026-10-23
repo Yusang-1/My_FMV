@@ -7,6 +7,11 @@ public class BranchController : MonoBehaviour
     [SerializeField] private NodeSO startNode;
     private NodeSO currentNode;
 
+    private void Start()
+    {
+        playerConditionData.Initialize();
+    }
+
     public NodeSO GetStartNode()
     {
         if (nodeContainer.TryGetNodeData(0, out NodeSO node))
@@ -17,11 +22,12 @@ public class BranchController : MonoBehaviour
         else return null;
     }
 
-    public bool TryGetNextNode(out NodeSO nextNode)
+    public bool TryGetNextNode(out NextNode nextNode, out NodeSO nextNodeData)
     {
         if (currentNode.NextNodes == null || currentNode.NextNodes.Length == 0)
         {
-            nextNode = null;
+            nextNode = default;
+            nextNodeData = null;
             return false;
         }
 
@@ -30,11 +36,11 @@ public class BranchController : MonoBehaviour
             bool isTotalTrue = true;
             foreach (var condition in next.Conditions)
             {
-                if(condition == PlayerConditionEnum.None)
+                if (condition == PlayerConditionEnum.None)
                 {
                     break;
                 }
-                
+
                 bool isConditionTrue = playerConditionData.ConditionDict[condition].Invoke();
 
                 isTotalTrue = isTotalTrue && isConditionTrue;
@@ -49,18 +55,26 @@ public class BranchController : MonoBehaviour
             {
                 if (nodeContainer.TryGetNodeData(next.NextCode, out NodeSO getNextNode))
                 {
-                    nextNode = getNextNode;
+                    nextNode = next;
+                    nextNodeData = getNextNode;
                     return true;
                 }
                 else
                 {
-                    nextNode = null;
+                    nextNode = default;
+                    nextNodeData = null;
                     return false;
                 }
             }
         }
 
-        nextNode = null;
+        nextNode = default;
+        nextNodeData = null;
         return false;
+    }
+
+    public void SetCurrentNode(NodeSO node)
+    {
+        currentNode = node;
     }
 }

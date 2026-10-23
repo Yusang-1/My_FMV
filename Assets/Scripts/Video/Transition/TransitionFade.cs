@@ -4,7 +4,14 @@ using System.Collections;
 
 public class TransitionFade : ITransitionPolicy
 {
+    private readonly VideoPlayController videoPlayController;
+    
     public TransitionPolicyEnum PolicyEnum { get; private set; } = TransitionPolicyEnum.Fade;
+    
+    public TransitionFade(VideoPlayController videoPlayController)
+    {
+        this.videoPlayController = videoPlayController;
+    }
 
     public IEnumerator WaitForTransition(TransitionData transitionData)
     {
@@ -95,7 +102,7 @@ public class TransitionFade : ITransitionPolicy
     {
         // fade in 할 텍스처를 검은색으로
         next.SetColor(0, 0, 0, 1);
-        next.PlayVideo();
+        videoPlayController.PlayLoadedVideo(next.VideoPlayer.url);
     }
 
     private void DoFadeIn(VideoPlayerWrapper next, float totalTime, float currentTime)

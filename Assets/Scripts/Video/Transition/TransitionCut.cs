@@ -2,7 +2,14 @@ using System.Collections;
 
 public class TransitionCut : ITransitionPolicy
 {
+    private readonly VideoPlayController videoPlayController;
+    
     public TransitionPolicyEnum PolicyEnum { get; private set; } = TransitionPolicyEnum.Cut;
+    
+    public TransitionCut(VideoPlayController videoPlayController)
+    {
+        this.videoPlayController = videoPlayController;
+    }
 
     public IEnumerator WaitForTransition(TransitionData transitionData)
     {
@@ -24,6 +31,6 @@ public class TransitionCut : ITransitionPolicy
     private void DoTransition(VideoPlayerWrapper current, VideoPlayerWrapper next)
     {
         current.EndVideo();
-        next.PlayVideo();
+        videoPlayController.PlayLoadedVideo(next.VideoPlayer.url);
     }
 }
