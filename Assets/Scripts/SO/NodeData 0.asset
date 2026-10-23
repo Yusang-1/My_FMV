@@ -17,4 +17,13 @@ MonoBehaviour:
   VideoType: 0
   NextNodes:
   - NextCode: 1
-    TransitionType: 1
+    Conditions: 00000000
+    TransitionType: 0
+    TransitionData:
+      rid: 4321109790807818311
+  references:
+    version: 2
+    RefIds:
+    - rid: 4321109790807818311
+      type: {class: TransitionCutData, ns: , asm: Assembly-CSharp}
+      data: 

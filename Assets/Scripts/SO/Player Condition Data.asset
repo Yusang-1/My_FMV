@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Player Condition Data
   m_EditorClassIdentifier: 
   conditionA: 0
-  conditionB: 0
+  conditionB: 1

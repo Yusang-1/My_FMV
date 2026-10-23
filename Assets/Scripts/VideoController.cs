@@ -10,11 +10,9 @@ public class VideoController : MonoBehaviour
     [SerializeField] private JudgePreLoadVideo judgePreLoad;
     [SerializeField] private LoadVideoRunTimeContext loadVideoRunTimeContext;
     [SerializeField] private VideoTransition transition;
+    [SerializeField] private BranchController branchController;
 
     private readonly LoadedVideoController loadedVideoController = new();
-
-    [Header("[ Node ]")]
-    [SerializeField] private NodeContainer nodeContainer;
 
     [Header("[ AWS CloudFront Setting ]")] // https://[CloudFront 도메인 이름]/[S3에 올린 파일명]    
     public string cloudFrontVideoUrl = "Https://d2vwjcp3kqcnox.cloudfront.net/Sarangbang_Sonnimgwa_Eomeoni(1961).mp4";
@@ -62,13 +60,11 @@ public class VideoController : MonoBehaviour
 
         if (pool.TryGetValue(out VideoPlayerWrapper wrapper))
         {
-            if (nodeContainer.TryGetNodeData(0, out NodeSO node))
-            {
+            currentNode = branchController.GetStartNode();
+            if (currentNode == null) return;
 
-                currentNode = node;
-                address = node.VideoAdress;
-                loader.LoadVideo(wrapper, address);
-            }
+            address = currentNode.VideoAdress;
+            loader.LoadVideo(wrapper, address);
         }
 
         StartCoroutine(Test(address));
@@ -98,14 +94,12 @@ public class VideoController : MonoBehaviour
 
     public void TestNextVideo()
     {
-        string address = default;
-
-        if (nodeContainer.TryGetNextNodeData(currentNode.Code, out NodeSO nextNode))
+        if (branchController.TryGetNextNode(out NodeSO nextNode))
         {
             // preload
             if (pool.TryGetValue(out VideoPlayerWrapper nextWrapper))
             {
-                address = nextNode.VideoAdress;
+                string address = nextNode.VideoAdress;
                 loader.LoadVideo(nextWrapper, address);
             }
 

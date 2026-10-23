@@ -13,6 +13,27 @@ MonoBehaviour:
   m_Name: NodeData 1
   m_EditorClassIdentifier: 
   Code: 1
-  VideoAdress: Https://d2vwjcp3kqcnox.cloudfront.net/Nat-Volcano-1.mp4
+  VideoAdress: Https://d2vwjcp3kqcnox.cloudfront.net/Nat-Penguin-1.mp4
   VideoType: 1
-  NextCode: 0
+  NextNodes:
+  - NextCode: 2
+    Conditions: 01000000
+    TransitionType: 1
+    TransitionData:
+      rid: 4321109790807818309
+  - NextCode: 3
+    Conditions: 02000000
+    TransitionType: 2
+    TransitionData:
+      rid: 4321109790807818310
+  references:
+    version: 2
+    RefIds:
+    - rid: 4321109790807818309
+      type: {class: TransitionDissolveData, ns: , asm: Assembly-CSharp}
+      data:
+        time: 3
+    - rid: 4321109790807818310
+      type: {class: TransitionFadeData, ns: , asm: Assembly-CSharp}
+      data:
+        time: 3
