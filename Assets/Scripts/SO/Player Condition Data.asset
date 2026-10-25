@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37d6265dbf53a2a4389a25017d11c1aa, type: 3}
   m_Name: Player Condition Data
   m_EditorClassIdentifier: 
-  conditionA: 0
-  conditionB: 1
+  conditionA: 1
+  conditionB: 0
