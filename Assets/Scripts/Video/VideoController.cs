@@ -66,4 +66,9 @@ public class VideoController : MonoBehaviour
         
         videoPlayController.PlayLoadedVideo(address);
     }
+    
+    public float GetCurrentPlayerTime()
+    {
+        return videoPlayController.GetCurrentPlayerTime();
+    }
 }

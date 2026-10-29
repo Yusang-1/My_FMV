@@ -85,4 +85,9 @@ public class VideoPlayController : MonoBehaviour
         transition.ReserveTransition(currentWrapper, nextWrapper,
             nextNode.TransitionType, nextNode.TransitionData);
     }
+    
+    public float GetCurrentPlayerTime()
+    {
+        return (float)currentVideoPlayer.time;
+    }
 }

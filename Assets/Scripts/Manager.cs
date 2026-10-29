@@ -21,7 +21,7 @@ public class Manager : MonoBehaviour
         uIController.OnTestStartRequested += videoController.OnPlay;
 
         subtitleController.OnShowSubtitleRequested += HandleShowSubtitle;
-
+        subtitleController.OnGetCurrentPlayerTimeRequest += videoController.GetCurrentPlayerTime;
     }
 
     private void UnbindEvents()
@@ -29,6 +29,7 @@ public class Manager : MonoBehaviour
         uIController.OnTestStartRequested -= videoController.OnPlay;
         
         subtitleController.OnShowSubtitleRequested -= HandleShowSubtitle;
+        subtitleController.OnGetCurrentPlayerTimeRequest -= videoController.GetCurrentPlayerTime;
     }
 
     private void HandleShowSubtitle(char[] text, float duration)
