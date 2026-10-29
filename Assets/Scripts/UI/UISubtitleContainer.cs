@@ -3,7 +3,7 @@ using System.Collections;
 using TMPro;
 
 public class UISubtitleContainer : MonoBehaviour
-{
+{    
     [SerializeField] private TextMeshProUGUI subtitleText;
 
     private IEnumerator subtitleTimerEnumerator;

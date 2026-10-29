@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class SubtitleData
 {
     public string ID;

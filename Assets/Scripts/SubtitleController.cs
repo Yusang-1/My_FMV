@@ -3,10 +3,10 @@ using System;
 
 public class SubtitleController : MonoBehaviour
 {
-    public event Action<string, float> OnShowSubtitleRequired;
+    public event Action<char[], float> OnShowSubtitleRequested;
 
-    public void ShowSubtitle(string text, float duration)
+    public void ShowSubtitle(char[] text, float duration)
     {
-        OnShowSubtitleRequired?.Invoke(text, duration);
+        OnShowSubtitleRequested?.Invoke(text, duration);
     }
 }

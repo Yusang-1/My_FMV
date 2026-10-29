@@ -494,6 +494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   videoController: {fileID: 209648388}
+  subtitleController: {fileID: 859885553}
   uIController: {fileID: 678698016}
 --- !u!4 &567449926
 Transform:
@@ -714,6 +715,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uITestStart: {fileID: 914837862}
+  uISubtitleContainer: {fileID: 779307645}
 --- !u!1 &755835371
 GameObject:
   m_ObjectHideFlags: 0
