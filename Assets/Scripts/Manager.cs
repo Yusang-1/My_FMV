@@ -4,7 +4,10 @@ public class Manager : MonoBehaviour
 {
     [SerializeField] private VideoController videoController;
     [SerializeField] private SubtitleController subtitleController;
+    [SerializeField] private SubtitleLoader subtitleLoader;
     [SerializeField] private UIController uIController;
+    
+    private readonly SubtitleDatas datas = new();
 
     private void OnEnable()
     {
@@ -22,6 +25,8 @@ public class Manager : MonoBehaviour
 
         subtitleController.OnShowSubtitleRequested += HandleShowSubtitle;
         subtitleController.OnGetCurrentPlayerTimeRequest += videoController.GetCurrentPlayerTime;
+        
+        subtitleLoader.OnParseSubtitleCompelete += datas.AddData;
     }
 
     private void UnbindEvents()
@@ -30,6 +35,8 @@ public class Manager : MonoBehaviour
         
         subtitleController.OnShowSubtitleRequested -= HandleShowSubtitle;
         subtitleController.OnGetCurrentPlayerTimeRequest -= videoController.GetCurrentPlayerTime;
+        
+        subtitleLoader.OnParseSubtitleCompelete -= datas.AddData;
     }
 
     private void HandleShowSubtitle(char[] text, float duration)
