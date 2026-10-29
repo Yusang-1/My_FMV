@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38ed9f88c92e94468afa497027f85d4, type: 3}
   m_Name: NodeData 1
   m_EditorClassIdentifier: 
-  Code: 1
+  Code: C01_C
   VideoAdress: Https://d2vwjcp3kqcnox.cloudfront.net/Nat-Penguin-1.mp4
   VideoType: 1
   NextNodes:
-  - NextCode: 2
+  - NextCode: C02_M
     Conditions: 01000000
     TransitionType: 1
     TransitionData:
       rid: 4321109790807818309
-  - NextCode: 3
+  - NextCode: C03_M
     Conditions: 02000000
     TransitionType: 2
     TransitionData:

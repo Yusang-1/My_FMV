@@ -4,13 +4,13 @@ using System.Collections.Generic;
 public class NodeContainer : MonoBehaviour
 {
     [SerializeField] private NodeSO[] nodeDataList;
-    private readonly Dictionary<int, NodeSO> nodeDataDict = new();
+    private readonly Dictionary<string, NodeSO> nodeDataDict = new();
 
     private void Start()
     {
         for (int i = 0; i < nodeDataList.Length; i++)
         {
-            int code = nodeDataList[i].Code;
+            string code = nodeDataList[i].Code;
             if (!nodeDataDict.ContainsKey(code))
             {
                 nodeDataDict.Add(code, nodeDataList[i]);
@@ -18,7 +18,7 @@ public class NodeContainer : MonoBehaviour
         }
     }
 
-    public bool TryGetNodeData(int code, out NodeSO node)
+    public bool TryGetNodeData(string code, out NodeSO node)
     {
         if (!nodeDataDict.ContainsKey(code))
         {
@@ -30,7 +30,7 @@ public class NodeContainer : MonoBehaviour
         return true;
     }
 
-    public bool TryGetNextNodeData(int currentNodeCode, out NodeSO nextNode)
+    public bool TryGetNextNodeData(string currentNodeCode, out NodeSO nextNode)
     {
         if (!nodeDataDict.ContainsKey(currentNodeCode))
         {
@@ -38,7 +38,7 @@ public class NodeContainer : MonoBehaviour
             return false;
         }
 
-        int nextCode = nodeDataDict[currentNodeCode].NextNodes[0].NextCode;
+        string nextCode = nodeDataDict[currentNodeCode].NextNodes[0].NextCode;
         if (!nodeDataDict.ContainsKey(nextCode))
         {
             nextNode = null;

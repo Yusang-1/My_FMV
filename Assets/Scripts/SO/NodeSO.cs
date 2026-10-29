@@ -4,7 +4,7 @@ using System;
 [CreateAssetMenu(fileName = "NodeData", menuName = "SO/Node/NodeData")]
 public class NodeSO : ScriptableObject
 {
-    public int Code;
+    public string Code;
     public string VideoAdress;
     public VideoType VideoType;
     public NextNode[] NextNodes;
@@ -13,7 +13,7 @@ public class NodeSO : ScriptableObject
 [Serializable]
 public struct NextNode
 {
-    public int NextCode;
+    public string NextCode;
     
     public PlayerConditionEnum[] Conditions;
     

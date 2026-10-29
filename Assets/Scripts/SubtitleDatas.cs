@@ -21,7 +21,9 @@ public class SubtitleDatas
     private readonly char target = '_';
     private string SubtitleIDToNodeCode(string subtitleID)
     {
-        int index = subtitleID.IndexOf(target);
+        // NodeCode는 두번째 '_' 전까지
+        int firstIndex = subtitleID.IndexOf(target);
+        int index = subtitleID.IndexOf(target, firstIndex + 1);
 
         if (index != -1)
         {

@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e38ed9f88c92e94468afa497027f85d4, type: 3}
   m_Name: NodeData 0
   m_EditorClassIdentifier: 
-  Code: 0
+  Code: C01_M
   VideoAdress: Https://d2vwjcp3kqcnox.cloudfront.net/Nat-Landscape-1.mp4
   VideoType: 0
   NextNodes:
-  - NextCode: 1
+  - NextCode: C01_C
     Conditions: 00000000
     TransitionType: 0
     TransitionData:

@@ -14,7 +14,7 @@ public class BranchController : MonoBehaviour
 
     public NodeSO GetStartNode()
     {
-        if (nodeContainer.TryGetNodeData(0, out NodeSO node))
+        if (nodeContainer.TryGetNodeData("C01_M", out NodeSO node))
         {
             currentNode = node;
             return currentNode;
