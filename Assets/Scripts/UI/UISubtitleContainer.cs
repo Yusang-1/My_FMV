@@ -1,19 +1,18 @@
 using UnityEngine;
-using TMPro;
 using System.Collections.Generic;
 
 public class UISubtitleContainer : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI[] subtitleTexts;
-    private readonly Queue<TextMeshProUGUI> tmpQueue = new();
+    [SerializeField] private UISubtitle[] subtitles;
+    private readonly Queue<UISubtitle> tmpQueue = new();
 
-    private readonly Dictionary<string, TextMeshProUGUI> textByID = new();
+    private readonly Dictionary<string, UISubtitle> subtitleByID = new();
 
     private readonly char[] blank = { };
 
     private void Start()
     {
-        foreach (var tmp in subtitleTexts)
+        foreach (var tmp in subtitles)
         {
             tmpQueue.Enqueue(tmp);
         }
@@ -22,9 +21,10 @@ public class UISubtitleContainer : MonoBehaviour
     public void ShowSubtitle(SubtitleData data)
     {
         char[] text = data.Text_EN.ToCharArray(); // 수정
+        char[] character = data.Character.ToCharArray(); // 수정
 
         // queue에서 사용하지 않는 tmp가져옴
-        TextMeshProUGUI tmp;
+        UISubtitle subtitle;
         if (tmpQueue.Count == 0)
         {
             Debug.LogWarning("queue에 subtitle tmp부족");
@@ -32,34 +32,34 @@ public class UISubtitleContainer : MonoBehaviour
         }
         else
         {
-            tmp = tmpQueue.Dequeue();
+            subtitle = tmpQueue.Dequeue();
         }
 
         // textByID에 subtitle id와 tmp를 dictionary에 저장
-        if (textByID.ContainsKey(data.ID))
+        if (subtitleByID.ContainsKey(data.ID))
         {
-            textByID[data.ID] = tmp;
+            subtitleByID[data.ID] = subtitle;
         }
         else
         {
-            textByID.Add(data.ID, tmp);
+            subtitleByID.Add(data.ID, subtitle);
         }
 
-        tmp.SetText(text);
-        tmp.gameObject.SetActive(true);
+        subtitle.SetText(text, character);
+        subtitle.gameObject.SetActive(true);
     }
 
     public void RemoveSubtitle(string id)
     {
-        if (!textByID.ContainsKey(id))
+        if (!subtitleByID.ContainsKey(id))
         {
             return;
         }
 
-        TextMeshProUGUI tmp = textByID[id];
-        textByID.Remove(id);
-        tmpQueue.Enqueue(tmp);
-        tmp.SetText(blank);
-        tmp.gameObject.SetActive(false);
+        UISubtitle subtitle = subtitleByID[id];
+        subtitleByID.Remove(id);
+        tmpQueue.Enqueue(subtitle);
+        subtitle.SetText(blank, blank);
+        subtitle.gameObject.SetActive(false);
     }
 }
