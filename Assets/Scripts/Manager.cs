@@ -35,8 +35,10 @@ public class Manager : MonoBehaviour
     {
         uIController.OnTestStartRequested += videoController.OnPlay;
 
-        subtitleController.OnShowSubtitleRequested += HandleShowSubtitle;
+        subtitleController.OnStartShowSubtitleRequested += HandleShowSubtitle;
+        subtitleController.OnRemoveSubtitleRequested += HandleRemoveSubtitle;
         subtitleController.OnGetCurrentPlayerTimeRequest += videoController.GetCurrentPlayerTime;
+        subtitleController.OnGetCurrentPlayerRequested += videoController.GetCurrentPlayer;
         subtitleController.OnGetNextSubtitleDataRequested += currentSubtitleDatas.GetSubtitleData;
 
         subtitleLoader.OnParseSubtitleCompelete += datas.AddData;
@@ -48,8 +50,10 @@ public class Manager : MonoBehaviour
     {
         uIController.OnTestStartRequested -= videoController.OnPlay;
 
-        subtitleController.OnShowSubtitleRequested -= HandleShowSubtitle;
+        subtitleController.OnStartShowSubtitleRequested -= HandleShowSubtitle;
+        subtitleController.OnRemoveSubtitleRequested -= HandleRemoveSubtitle;
         subtitleController.OnGetCurrentPlayerTimeRequest -= videoController.GetCurrentPlayerTime;
+        subtitleController.OnGetCurrentPlayerRequested -= videoController.GetCurrentPlayer;
         subtitleController.OnGetNextSubtitleDataRequested -= currentSubtitleDatas.GetSubtitleData;
 
         subtitleLoader.OnParseSubtitleCompelete -= datas.AddData;
@@ -57,8 +61,13 @@ public class Manager : MonoBehaviour
         branchController.OnCurrentNodeChanged -= currentSubtitleDatas.SetCurrentNodeSubtitleDatas;
     }
 
-    private void HandleShowSubtitle(char[] text, float duration)
+    private void HandleShowSubtitle(SubtitleData data)
     {
-        uIController.OnShowSubtitleRequested?.Invoke(text, duration);
+        // uIController.OnShowSubtitleRequested?.Invoke(text, duration);
+    }
+    
+    private void HandleRemoveSubtitle(string id)
+    {
+        
     }
 }

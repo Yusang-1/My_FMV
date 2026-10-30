@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Video;
 
 public class VideoController : MonoBehaviour
 {
@@ -72,5 +73,10 @@ public class VideoController : MonoBehaviour
     public float GetCurrentPlayerTime()
     {
         return videoPlayController.GetCurrentPlayerTime();
+    }
+    
+    public VideoPlayer GetCurrentPlayer()
+    {
+        return videoPlayController.GetCurrentPlayer();
     }
 }

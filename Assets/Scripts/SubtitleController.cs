@@ -1,14 +1,32 @@
 using UnityEngine;
 using System;
+using UnityEngine.Video;
 
 public class SubtitleController : MonoBehaviour
 {
-    public event Action<char[], float> OnShowSubtitleRequested;
     public event Func<SubtitleData> OnGetNextSubtitleDataRequested;
     public event Func<float> OnGetCurrentPlayerTimeRequest;
+    public event Func<VideoPlayer> OnGetCurrentPlayerRequested;
+    
+    // SubtitleShower 연결 event
+    public event Action<SubtitleData> OnStartShowSubtitleRequested;
+    public event Action<string> OnRemoveSubtitleRequested;
 
+    private readonly SubtitleShower subtitleShower = new();
     private SubtitleData currentSubtitleData;
 
+    private void OnEnable()
+    {
+        subtitleShower.OnStartShowSubtitleRequested += HandleStartShowSubtitle;
+        subtitleShower.OnRemoveSubtitleRequested += HandleRemoveSubtitle;
+    }
+
+    private void OnDisable()
+    {
+        subtitleShower.OnStartShowSubtitleRequested -= HandleStartShowSubtitle;
+        subtitleShower.OnRemoveSubtitleRequested -= HandleRemoveSubtitle;
+    }    
+    
     private void Update()
     {
         JudgeSubtitle();
@@ -20,7 +38,7 @@ public class SubtitleController : MonoBehaviour
         {
             if (IsSubtitleShowTime(currentTime))
             {
-                ShowSubtitle(currentSubtitleData.Text_EN.ToCharArray(), currentTime, currentSubtitleData.EndTime);
+                ShowSubtitle(currentSubtitleData, currentTime);
             }
         }
     }
@@ -55,9 +73,10 @@ public class SubtitleController : MonoBehaviour
         }
     }
 
-    public void ShowSubtitle(char[] text, float currentTime, float endTime)
+    public void ShowSubtitle(SubtitleData subtitleData, float currentTime)
     {
-        OnShowSubtitleRequested?.Invoke(text, endTime - currentTime);
+        VideoPlayer videoPlayer = OnGetCurrentPlayerRequested?.Invoke();
+        subtitleShower.StartShowSubtitle(videoPlayer, subtitleData);
 
         GetNextSubtitleData(currentTime);
     }
@@ -72,5 +91,15 @@ public class SubtitleController : MonoBehaviour
             Debug.LogWarning("새 SubtitleData의 시작시간이 현재시간 이전");
             GetNextSubtitleData(currentTime);
         }
+    }
+    
+    private void HandleRemoveSubtitle(string id)
+    {
+        OnRemoveSubtitleRequested?.Invoke(id);
+    }
+    
+    private void HandleStartShowSubtitle(SubtitleData subtitleData)
+    {
+        OnStartShowSubtitleRequested?.Invoke(subtitleData);
     }
 }

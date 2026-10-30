@@ -4,7 +4,8 @@ using System;
 public class UIController : MonoBehaviour
 {
     public event Action OnTestStartRequested;
-    public Action<char[], float> OnShowSubtitleRequested;
+    public Action<SubtitleData> OnShowSubtitleRequested;
+    public Action<string> OnRemoveSubtitleRequested;
     
     [SerializeField] private UITestStart uITestStart;
     [SerializeField] private UISubtitleContainer uISubtitleContainer;
@@ -24,6 +25,7 @@ public class UIController : MonoBehaviour
         uITestStart.OnTestStartRequested += HandleTestStart;
         
         OnShowSubtitleRequested += uISubtitleContainer.ShowSubtitle;
+        OnRemoveSubtitleRequested += uISubtitleContainer.RemoveSubtitle;
     }
     
     private void UnbindEvents()
@@ -31,6 +33,7 @@ public class UIController : MonoBehaviour
         uITestStart.OnTestStartRequested -= HandleTestStart;
         
         OnShowSubtitleRequested -= uISubtitleContainer.ShowSubtitle;
+        OnRemoveSubtitleRequested -= uISubtitleContainer.RemoveSubtitle;
     }
     
     private void HandleTestStart()

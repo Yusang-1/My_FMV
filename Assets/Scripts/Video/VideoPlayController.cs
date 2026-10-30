@@ -90,4 +90,9 @@ public class VideoPlayController : MonoBehaviour
     {
         return (float)currentVideoPlayer.time;
     }
+    
+    public VideoPlayer GetCurrentPlayer()
+    {
+        return currentVideoPlayer;
+    }
 }
