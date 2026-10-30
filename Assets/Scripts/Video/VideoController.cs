@@ -7,9 +7,9 @@ public class VideoController : MonoBehaviour
     [SerializeField] private VideoLoader loader;
     [SerializeField] private JudgePreLoadVideo judgePreLoad;
     [SerializeField] private VideoTransition transition;
-    [SerializeField] private BranchController branchController;
     [SerializeField] private VideoPlayController videoPlayController;
     [SerializeField] private LoadVideoRunTimeContext loadVideoRunTimeContext;
+    private BranchController branchController;
 
     private readonly LoadedVideoController loadedVideoController = new();
 
@@ -25,8 +25,10 @@ public class VideoController : MonoBehaviour
         BindEvents();
     }
 
-    private void Start()
+    public void Initialize(BranchController branchController)
     {
+        this.branchController = branchController;
+
         judgePreLoad.Initialize(loadVideoRunTimeContext);
         transition.Initialize(videoPlayController);
         videoPlayController.Initialize(pool, loader, judgePreLoad, transition, branchController, loadedVideoController);
@@ -50,11 +52,11 @@ public class VideoController : MonoBehaviour
 
         judgePreLoad.OnPreLoadRequired -= videoPlayController.ReserveNextVideo;
     }
-    
+
     public void OnPlay()
     {
         string address = default;
-        
+
         if (pool.TryGetValue(out VideoPlayerWrapper wrapper))
         {
             NodeSO node = branchController.GetStartNode();
@@ -63,10 +65,10 @@ public class VideoController : MonoBehaviour
             address = node.VideoAdress;
             loader.LoadVideo(wrapper, address);
         }
-        
+
         videoPlayController.PlayLoadedVideo(address);
     }
-    
+
     public float GetCurrentPlayerTime()
     {
         return videoPlayController.GetCurrentPlayerTime();

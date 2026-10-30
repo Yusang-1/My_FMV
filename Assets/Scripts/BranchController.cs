@@ -1,11 +1,23 @@
 using UnityEngine;
+using System;
 
 public class BranchController : MonoBehaviour
 {
+    public event Action<string> OnCurrentNodeChanged;
+
     [SerializeField] private NodeContainer nodeContainer;
     [SerializeField] private PlayerConditionSO playerConditionData;
     [SerializeField] private NodeSO startNode;
     private NodeSO currentNode;
+
+    private NodeSO CurrentNode
+    {
+        set
+        {
+            currentNode = value;
+            OnCurrentNodeChanged?.Invoke(currentNode.Code);
+        }
+    }
 
     private void Start()
     {
@@ -16,7 +28,7 @@ public class BranchController : MonoBehaviour
     {
         if (nodeContainer.TryGetNodeData("C01_M", out NodeSO node))
         {
-            currentNode = node;
+            CurrentNode = node;
             return currentNode;
         }
         else return null;
@@ -75,6 +87,6 @@ public class BranchController : MonoBehaviour
 
     public void SetCurrentNode(NodeSO node)
     {
-        currentNode = node;
+        CurrentNode = node;
     }
 }

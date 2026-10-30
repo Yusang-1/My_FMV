@@ -4,6 +4,16 @@ public class SubtitleDatas
 {
     private readonly Dictionary<string, List<SubtitleData>> subtitleDatasByNodeCode = new();
 
+    public List<SubtitleData> GetData(string code)
+    {
+        if (!subtitleDatasByNodeCode.ContainsKey(code))
+        {
+            return null;
+        }
+
+        return subtitleDatasByNodeCode[code];
+    }
+
     public void AddData(List<SubtitleData> datas)
     {
         foreach (var data in datas)
