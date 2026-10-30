@@ -20,9 +20,6 @@ public class UISubtitleContainer : MonoBehaviour
 
     public void ShowSubtitle(SubtitleData data)
     {
-        char[] text = data.Text_EN.ToCharArray(); // 수정
-        char[] character = data.Character.ToCharArray(); // 수정
-
         // queue에서 사용하지 않는 tmp가져옴
         UISubtitle subtitle;
         if (tmpQueue.Count == 0)
@@ -45,7 +42,7 @@ public class UISubtitleContainer : MonoBehaviour
             subtitleByID.Add(data.ID, subtitle);
         }
 
-        subtitle.SetText(text, character);
+        subtitle.SetText(data.Text_EN, data.Character);
         subtitle.gameObject.SetActive(true);
     }
 
