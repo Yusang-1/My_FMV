@@ -30,6 +30,8 @@ public class SubtitleController : MonoBehaviour
     private void Update()
     {
         JudgeSubtitle();
+
+        subtitleShower.Update();
     }
 
     private void JudgeSubtitle()
@@ -81,6 +83,11 @@ public class SubtitleController : MonoBehaviour
         subtitleShower.StartShowSubtitle(videoPlayer, subtitleData);
 
         GetNextSubtitleData(currentTime);
+    }
+
+    public void FirstSetSubtitle()
+    {
+        currentSubtitleData = OnGetNextSubtitleDataRequested?.Invoke();
     }
 
     private void GetNextSubtitleData(float currentTime)

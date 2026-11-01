@@ -9,6 +9,8 @@ public class SubtitleShower
     public event Action<string> OnRemoveSubtitleRequested;
 
     private readonly Dictionary<VideoPlayer, List<SubtitleData>> subtitleDatasByPlayer = new();
+    private readonly Dictionary<SubtitleData, VideoPlayer> playerBySubtitleData = new(4);
+    private readonly HashSet<SubtitleData> removeReservedData = new(4);
 
     public void Update()
     {
@@ -30,16 +32,18 @@ public class SubtitleShower
                 }
             }
         }
+        RemoveCollection();
     }
 
     public void StartShowSubtitle(VideoPlayer player, SubtitleData data)
-    {
+    {        
         if (!subtitleDatasByPlayer.ContainsKey(player))
         {
             subtitleDatasByPlayer.Add(player, new());
         }
 
         subtitleDatasByPlayer[player].Add(data);
+        playerBySubtitleData.Add(data, player);
 
         // UISubtitleContainer에 자막 켜기 요청
         OnStartShowSubtitleRequested?.Invoke(data);
@@ -47,7 +51,30 @@ public class SubtitleShower
 
     private void RemoveSubtitle(SubtitleData data)
     {
+        if (playerBySubtitleData.ContainsKey(data))
+        {
+            ReserveRemoveCollection(data);
+        }
+
         // UISubtitleContainer에 해당 ID의 자막 종료 요청
         OnRemoveSubtitleRequested?.Invoke(data.ID);
+    }
+
+    private void ReserveRemoveCollection(SubtitleData data)
+    {
+        removeReservedData.Add(data);
+    }
+
+    private void RemoveCollection()
+    {
+        foreach (var data in removeReservedData)
+        {
+            var player = playerBySubtitleData[data];
+
+            subtitleDatasByPlayer[player].Remove(data);
+            playerBySubtitleData.Remove(data);
+        }
+
+        removeReservedData.Clear();
     }
 }

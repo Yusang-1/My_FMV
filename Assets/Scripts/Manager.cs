@@ -44,6 +44,8 @@ public class Manager : MonoBehaviour
         subtitleLoader.OnParseSubtitleCompelete += datas.AddData;
 
         branchController.OnCurrentNodeChanged += currentSubtitleDatas.SetCurrentNodeSubtitleDatas;
+        
+        videoController.OnFirstPlayVideo += subtitleController.FirstSetSubtitle;
     }
 
     private void UnbindEvents()
@@ -59,15 +61,17 @@ public class Manager : MonoBehaviour
         subtitleLoader.OnParseSubtitleCompelete -= datas.AddData;
 
         branchController.OnCurrentNodeChanged -= currentSubtitleDatas.SetCurrentNodeSubtitleDatas;
+        
+        videoController.OnFirstPlayVideo -= subtitleController.FirstSetSubtitle;
     }
 
     private void HandleShowSubtitle(SubtitleData data)
     {
-        // uIController.OnShowSubtitleRequested?.Invoke(text, duration);
+        uIController.OnShowSubtitleRequested?.Invoke(data);
     }
     
     private void HandleRemoveSubtitle(string id)
     {
-        
+        uIController.OnRemoveSubtitleRequested(id);
     }
 }

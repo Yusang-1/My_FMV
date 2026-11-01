@@ -1,8 +1,11 @@
 using UnityEngine;
 using UnityEngine.Video;
+using System;
 
 public class VideoController : MonoBehaviour
 {
+    public event Action OnFirstPlayVideo;
+    
     [Header("[ Video ]")]
     [SerializeField] private VideoPlayerPool pool;
     [SerializeField] private VideoLoader loader;
@@ -68,6 +71,8 @@ public class VideoController : MonoBehaviour
         }
 
         videoPlayController.PlayLoadedVideo(address);
+        
+        OnFirstPlayVideo?.Invoke();
     }
 
     public float GetCurrentPlayerTime()
