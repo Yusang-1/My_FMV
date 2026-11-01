@@ -8,9 +8,12 @@ public class SubtitleShower
     public event Action<SubtitleData> OnStartShowSubtitleRequested;
     public event Action<string> OnRemoveSubtitleRequested;
 
-    private readonly Dictionary<VideoPlayer, List<SubtitleData>> subtitleDatasByPlayer = new();
-    private readonly Dictionary<SubtitleData, VideoPlayer> playerBySubtitleData = new(4);
-    private readonly HashSet<SubtitleData> removeReservedData = new(4);
+    private readonly Dictionary<VideoPlayer, List<SubtitleData>> subtitleDatasByPlayer = new(videoPlayerOnceLimit);
+    private readonly Dictionary<SubtitleData, VideoPlayer> playerBySubtitleData = new(subtitleOnceLimit);
+    private readonly HashSet<SubtitleData> removeReservedData = new(subtitleOnceLimit);
+
+    private const int subtitleOnceLimit = 3;
+    private const int videoPlayerOnceLimit = 2;
 
     public void Update()
     {
@@ -36,10 +39,10 @@ public class SubtitleShower
     }
 
     public void StartShowSubtitle(VideoPlayer player, SubtitleData data)
-    {        
+    {
         if (!subtitleDatasByPlayer.ContainsKey(player))
         {
-            subtitleDatasByPlayer.Add(player, new());
+            subtitleDatasByPlayer.Add(player, new(subtitleOnceLimit));
         }
 
         subtitleDatasByPlayer[player].Add(data);

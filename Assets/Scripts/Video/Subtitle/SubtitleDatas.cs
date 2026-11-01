@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 public class SubtitleDatas
 {
-    private readonly Dictionary<string, List<SubtitleData>> subtitleDatasByNodeCode = new();
+    private Dictionary<string, List<SubtitleData>> subtitleDatasByNodeCode;
 
     public List<SubtitleData> GetData(string code)
     {
@@ -14,10 +14,16 @@ public class SubtitleDatas
         return subtitleDatasByNodeCode[code];
     }
 
+    /// <summary>
+    /// 자막 데이터 parse를 완료한 뒤 자막 데이터가 포함된 노드의 코드에 따라 dictionary에 분류
+    /// </summary>    
     public void AddData(List<SubtitleData> datas)
     {
+        subtitleDatasByNodeCode = new(datas.Count);
+
         foreach (var data in datas)
         {
+            // 자막 id를 자막이 포함된 node의 code로 변경
             string nodeCode = SubtitleIDToNodeCode(data.ID);
 
             if (!subtitleDatasByNodeCode.ContainsKey(nodeCode))
