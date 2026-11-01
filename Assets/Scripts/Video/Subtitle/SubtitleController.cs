@@ -7,7 +7,7 @@ public class SubtitleController : MonoBehaviour
     public event Func<SubtitleData> OnGetNextSubtitleDataRequested;
     public event Func<float> OnGetCurrentPlayerTimeRequest;
     public event Func<VideoPlayer> OnGetCurrentPlayerRequested;
-    
+
     // SubtitleShower 연결 event
     public event Action<SubtitleData> OnStartShowSubtitleRequested;
     public event Action<string> OnRemoveSubtitleRequested;
@@ -25,8 +25,8 @@ public class SubtitleController : MonoBehaviour
     {
         subtitleShower.OnStartShowSubtitleRequested -= HandleStartShowSubtitle;
         subtitleShower.OnRemoveSubtitleRequested -= HandleRemoveSubtitle;
-    }    
-    
+    }
+
     private void Update()
     {
         JudgeSubtitle();
@@ -52,7 +52,9 @@ public class SubtitleController : MonoBehaviour
         }
 
         time = OnGetCurrentPlayerTimeRequest.Invoke();
-        return true;
+
+        // 받은 시간이 0 이상이면 true
+        return time >= 0;
     }
 
     private bool IsSubtitleShowTime(float currentTime)
@@ -92,12 +94,12 @@ public class SubtitleController : MonoBehaviour
             GetNextSubtitleData(currentTime);
         }
     }
-    
+
     private void HandleRemoveSubtitle(string id)
     {
         OnRemoveSubtitleRequested?.Invoke(id);
     }
-    
+
     private void HandleStartShowSubtitle(SubtitleData subtitleData)
     {
         OnStartShowSubtitleRequested?.Invoke(subtitleData);

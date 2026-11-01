@@ -461,7 +461,7 @@ MonoBehaviour:
   subtitleController: {fileID: 859885553}
   subtitleLoader: {fileID: 859885555}
   uIController: {fileID: 678698016}
-  branchController: {fileID: 0}
+  branchController: {fileID: 1168360080}
 --- !u!4 &567449926
 Transform:
   m_ObjectHideFlags: 0
