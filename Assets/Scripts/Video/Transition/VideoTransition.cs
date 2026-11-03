@@ -1,23 +1,35 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class VideoTransition : MonoBehaviour
 {
+    public event Action OnTransitionStart;
+
     private TransitionCut policyCut;
     private TransitionDissolve policyDissolve;
     private TransitionFade policyFade;
 
     private readonly Dictionary<TransitionPolicyEnum, ITransitionPolicy> policyDict = new();
-    
+
     public void Initialize(VideoPlayController videoPlayController)
     {
         policyCut = new TransitionCut(videoPlayController);
         policyDissolve = new TransitionDissolve(videoPlayController);
         policyFade = new TransitionFade(videoPlayController);
-        
+
         policyDict.Add(policyCut.PolicyEnum, policyCut);
         policyDict.Add(policyDissolve.PolicyEnum, policyDissolve);
         policyDict.Add(policyFade.PolicyEnum, policyFade);
+
+        BindEvents();
+    }
+
+    private void BindEvents()
+    {
+        policyCut.OnTransitionStart += HandleTransitionStart;
+        policyDissolve.OnTransitionStart += HandleTransitionStart;
+        policyFade.OnTransitionStart += HandleTransitionStart;
     }
 
     public void ReserveTransition(VideoPlayerWrapper current, VideoPlayerWrapper next,
@@ -27,6 +39,11 @@ public class VideoTransition : MonoBehaviour
 
         transitionData.SetData(current, next);
         StartCoroutine(policy.WaitForTransition(transitionData));
+    }
+
+    private void HandleTransitionStart()
+    {
+        OnTransitionStart?.Invoke();
     }
 }
 

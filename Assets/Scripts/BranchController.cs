@@ -9,6 +9,7 @@ public class BranchController : MonoBehaviour
     [SerializeField] private PlayerConditionSO playerConditionData;
     [SerializeField] private NodeSO startNode;
     private NodeSO currentNode;
+    private NodeSO reservedNextNode;
 
     private NodeSO CurrentNode
     {
@@ -85,8 +86,29 @@ public class BranchController : MonoBehaviour
         return false;
     }
 
-    public void SetCurrentNode(NodeSO node)
+    /// <summary>
+    /// 다음에 전환될 Node를 저장
+    /// </summary>    
+    public void SetReservedNextNode(NodeSO node)
     {
-        CurrentNode = node;
+        if (node == null)
+        {
+            return;
+        }
+
+        reservedNextNode = node;
+    }
+
+    /// <summary>
+    /// 저장된 reservedNextNode로 currnetNode를 설정
+    /// </summary>
+    public void SetCurrentNode()
+    {
+        if (reservedNextNode == null)
+        {
+            return;
+        }
+
+        CurrentNode = reservedNextNode;
     }
 }

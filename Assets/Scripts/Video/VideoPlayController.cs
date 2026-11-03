@@ -81,7 +81,7 @@ public class VideoPlayController : MonoBehaviour
         loader.LoadVideo(nextWrapper, address);
 
         // 현재 재생중인 player와 다음 player의 transition을 예약
-        branchController.SetCurrentNode(nextNodeData);
+        branchController.SetReservedNextNode(nextNodeData);
         transition.ReserveTransition(currentWrapper, nextWrapper,
             nextNode.TransitionType, nextNode.TransitionData);
     }

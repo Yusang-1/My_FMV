@@ -1,9 +1,12 @@
 using UnityEngine;
 using UnityEngine.Video;
 using System.Collections;
+using System;
 
 public class TransitionDissolve : ITransitionPolicy
 {
+    public event Action OnTransitionStart;
+
     private readonly VideoPlayController videoPlayController;
 
     public TransitionPolicyEnum PolicyEnum { get; private set; } = TransitionPolicyEnum.Dissolve;
@@ -43,6 +46,8 @@ public class TransitionDissolve : ITransitionPolicy
 
     private void StartDissolve(VideoPlayerWrapper next)
     {
+        OnTransitionStart?.Invoke();
+
         // next의 alpha를 0으로
         next.SetAlpha(0);
         videoPlayController.PlayLoadedVideo(next.VideoPlayer.url);

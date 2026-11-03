@@ -5,12 +5,11 @@ using System;
 public class VideoController : MonoBehaviour
 {
     public event Action OnFirstPlayVideo;
-    
+
     [Header("[ Video ]")]
     [SerializeField] private VideoPlayerPool pool;
     [SerializeField] private VideoLoader loader;
     [SerializeField] private JudgePreLoadVideo judgePreLoad;
-    [SerializeField] private VideoTransition transition;
     [SerializeField] private VideoPlayController videoPlayController;
     [SerializeField] private LoadVideoRunTimeContext loadVideoRunTimeContext;
     private BranchController branchController;
@@ -29,12 +28,12 @@ public class VideoController : MonoBehaviour
         BindEvents();
     }
 
-    public void Initialize(BranchController branchController)
+    public void Initialize(BranchController branchController, VideoTransition transition)
     {
         this.branchController = branchController;
 
-        judgePreLoad.Initialize(loadVideoRunTimeContext);
         transition.Initialize(videoPlayController);
+        judgePreLoad.Initialize(loadVideoRunTimeContext);
         videoPlayController.Initialize(pool, loader, judgePreLoad, transition, branchController, loadedVideoController);
     }
 
@@ -71,7 +70,7 @@ public class VideoController : MonoBehaviour
         }
 
         videoPlayController.PlayLoadedVideo(address);
-        
+
         OnFirstPlayVideo?.Invoke();
     }
 
@@ -79,7 +78,7 @@ public class VideoController : MonoBehaviour
     {
         return videoPlayController.GetCurrentPlayerTime();
     }
-    
+
     public VideoPlayer GetCurrentPlayer()
     {
         return videoPlayController.GetCurrentPlayer();

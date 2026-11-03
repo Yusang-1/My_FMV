@@ -45,6 +45,9 @@ public class SubtitleController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 현재 Video Player의 재생 시간을 받아옴
+    /// </summary>
     private bool TryGetCurrentPlayerTime(out float time)
     {
         if (OnGetCurrentPlayerTimeRequest == null)
@@ -59,6 +62,9 @@ public class SubtitleController : MonoBehaviour
         return time >= 0;
     }
 
+    /// <summary>
+    /// currentTime과 currentSubtitleData의 StartTime을 비교해 자막 재생 시간을 판정
+    /// </summary>
     private bool IsSubtitleShowTime(float currentTime)
     {
         if (currentSubtitleData == null)

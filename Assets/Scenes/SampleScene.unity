@@ -259,7 +259,6 @@ MonoBehaviour:
   pool: {fileID: 209648387}
   loader: {fileID: 209648386}
   judgePreLoad: {fileID: 209648385}
-  transition: {fileID: 209648389}
   videoPlayController: {fileID: 209648390}
   loadVideoRunTimeContext: {fileID: 209648384}
   cloudFrontVideoUrl: Https://d2vwjcp3kqcnox.cloudfront.net/Sarangbang_Sonnimgwa_Eomeoni(1961).mp4
@@ -458,10 +457,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   videoController: {fileID: 209648388}
+  transition: {fileID: 209648389}
   subtitleController: {fileID: 859885553}
   subtitleLoader: {fileID: 859885555}
-  uIController: {fileID: 678698016}
   branchController: {fileID: 1168360080}
+  uIController: {fileID: 678698016}
 --- !u!4 &567449926
 Transform:
   m_ObjectHideFlags: 0
