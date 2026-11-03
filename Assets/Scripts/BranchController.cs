@@ -4,6 +4,7 @@ using System;
 public class BranchController : MonoBehaviour
 {
     public event Action<string> OnCurrentNodeChanged;
+    public event Action OnChangeCurrentNodeFinished;
 
     [SerializeField] private NodeContainer nodeContainer;
     [SerializeField] private PlayerConditionSO playerConditionData;
@@ -17,6 +18,7 @@ public class BranchController : MonoBehaviour
         {
             currentNode = value;
             OnCurrentNodeChanged?.Invoke(currentNode.Code);
+            OnChangeCurrentNodeFinished?.Invoke();
         }
     }
 

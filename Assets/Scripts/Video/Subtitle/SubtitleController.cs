@@ -91,11 +91,6 @@ public class SubtitleController : MonoBehaviour
         GetNextSubtitleData(currentTime);
     }
 
-    public void FirstSetSubtitle()
-    {
-        currentSubtitleData = OnGetNextSubtitleDataRequested?.Invoke();
-    }
-
     private void GetNextSubtitleData(float currentTime)
     {
         currentSubtitleData = OnGetNextSubtitleDataRequested?.Invoke();
@@ -105,6 +100,16 @@ public class SubtitleController : MonoBehaviour
         {
             Debug.LogWarning("새 SubtitleData의 시작시간이 현재시간 이전");
             GetNextSubtitleData(currentTime);
+        }
+    }
+
+    public void GetSubtitleDataOnLoadNextNode()
+    {
+        // 현재 node의 마지막 자막이 끝났을 때 CurrentSubtitleDatas에 다음 node의 자막 데이터들이 저장되지 않은 경우
+        // CurrentNode가 변경되었을 때 nextSubtitleData를 다시 한번 받아옴
+        if (currentSubtitleData == null)
+        {
+            GetNextSubtitleData(0);
         }
     }
 

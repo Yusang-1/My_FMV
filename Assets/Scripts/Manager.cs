@@ -44,11 +44,10 @@ public class Manager : MonoBehaviour
 
         subtitleLoader.OnParseSubtitleCompelete += datas.AddData;
 
-        branchController.OnCurrentNodeChanged += currentSubtitleDatas.SetCurrentNodeSubtitleDatas;
-
         transition.OnTransitionStart += branchController.SetCurrentNode;
 
-        videoController.OnFirstPlayVideo += subtitleController.FirstSetSubtitle;
+        branchController.OnCurrentNodeChanged += currentSubtitleDatas.SetCurrentNodeSubtitleDatas;
+        branchController.OnChangeCurrentNodeFinished += subtitleController.GetSubtitleDataOnLoadNextNode;
     }
 
     private void UnbindEvents()
@@ -63,11 +62,10 @@ public class Manager : MonoBehaviour
 
         subtitleLoader.OnParseSubtitleCompelete -= datas.AddData;
 
-        branchController.OnCurrentNodeChanged -= currentSubtitleDatas.SetCurrentNodeSubtitleDatas;
-
         transition.OnTransitionStart -= branchController.SetCurrentNode;
 
-        videoController.OnFirstPlayVideo -= subtitleController.FirstSetSubtitle;
+        branchController.OnCurrentNodeChanged -= currentSubtitleDatas.SetCurrentNodeSubtitleDatas;
+        branchController.OnChangeCurrentNodeFinished -= subtitleController.GetSubtitleDataOnLoadNextNode;
     }
 
     private void HandleShowSubtitle(SubtitleData data)

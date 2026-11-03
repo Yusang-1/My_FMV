@@ -1,3 +1,5 @@
+using System;
+
 public class SubtitleData : ICSVParseData
 {
     public string ID;
