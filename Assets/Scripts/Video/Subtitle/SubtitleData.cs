@@ -6,6 +6,7 @@ public class SubtitleData : ICSVParseData
     public float StartTime;
     public float EndTime;
     public string Character;
+    public SubtitleType Type;
     public string Text_KR;
     public string Text_EN;
 
@@ -15,7 +16,14 @@ public class SubtitleData : ICSVParseData
         StartTime = float.TryParse(datas[1], out float startTime) ? startTime : float.MinValue;
         EndTime = float.TryParse(datas[2], out float endTime) ? endTime : float.MinValue;
         Character = datas[3];
-        Text_KR = datas[4];
-        Text_EN = datas[5];
+        Type = int.TryParse(datas[4], out int type) ? (SubtitleType)type : SubtitleType.Default;
+        Text_KR = datas[5];
+        Text_EN = datas[6];
     }
+}
+
+public enum SubtitleType
+{
+    Default,
+    Choice
 }

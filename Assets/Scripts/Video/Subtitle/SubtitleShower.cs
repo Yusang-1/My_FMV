@@ -48,7 +48,7 @@ public class SubtitleShower
         subtitleDatasByPlayer[player].Add(data);
         playerBySubtitleData.Add(data, player);
 
-        // UISubtitleContainer에 자막 켜기 요청
+        // UIContainerSubtitleTotal에 자막 켜기 요청
         OnStartShowSubtitleRequested?.Invoke(data);
     }
 
