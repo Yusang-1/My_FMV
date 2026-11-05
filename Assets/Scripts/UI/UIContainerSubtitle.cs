@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class UISubtitleContainer : MonoBehaviour
+public class UIContainerSubtitle : MonoBehaviour
 {
-    [SerializeField] private UISubtitle[] subtitles;
-    private readonly Queue<UISubtitle> tmpQueue = new();
+    [SerializeField] protected UISubtitle[] subtitles;
+    protected readonly Queue<UISubtitle> tmpQueue = new();
 
-    private readonly Dictionary<string, UISubtitle> subtitleByID = new();
+    protected readonly Dictionary<string, UISubtitle> subtitleByID = new();
 
     private readonly char[] blank = { };
 

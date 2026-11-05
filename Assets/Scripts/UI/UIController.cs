@@ -8,7 +8,7 @@ public class UIController : MonoBehaviour
     public Action<string> OnRemoveSubtitleRequested;
 
     [SerializeField] private UITestStart uITestStart;
-    [SerializeField] private UISubtitleContainer uISubtitleContainer;
+    [SerializeField] private UIContainerSubtitleTotal uIContainerSubtitleTotal;
 
     private void OnEnable()
     {
@@ -24,20 +24,30 @@ public class UIController : MonoBehaviour
     {
         uITestStart.OnTestStartRequested += HandleTestStart;
 
-        OnShowSubtitleRequested += uISubtitleContainer.ShowSubtitle;
-        OnRemoveSubtitleRequested += uISubtitleContainer.RemoveSubtitle;
+        OnShowSubtitleRequested += HandleShowSubtitle;
+        OnRemoveSubtitleRequested += HandleRemoveSubtitle;
     }
 
     private void UnbindEvents()
     {
         uITestStart.OnTestStartRequested -= HandleTestStart;
 
-        OnShowSubtitleRequested -= uISubtitleContainer.ShowSubtitle;
-        OnRemoveSubtitleRequested -= uISubtitleContainer.RemoveSubtitle;
+        OnShowSubtitleRequested -= HandleShowSubtitle;
+        OnRemoveSubtitleRequested -= HandleRemoveSubtitle;
     }
 
     private void HandleTestStart()
     {
         OnTestStartRequested?.Invoke();
+    }
+
+    private void HandleShowSubtitle(SubtitleData data)
+    {
+        uIContainerSubtitleTotal.OnShowSubtitleRequested?.Invoke(data);
+    }
+
+    private void HandleRemoveSubtitle(string id)
+    {
+        uIContainerSubtitleTotal.OnRemoveSubtitleRequested?.Invoke(id);
     }
 }
