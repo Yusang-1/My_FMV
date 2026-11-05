@@ -6,11 +6,13 @@ using System.Collections;
 public class TransitionFade : ITransitionPolicy
 {
     public event Action OnTransitionStart;
-    
+
     private readonly VideoPlayController videoPlayController;
-    
+
     public TransitionPolicyEnum PolicyEnum { get; private set; } = TransitionPolicyEnum.Fade;
     
+    private readonly float fadeLimit = 0.9f;
+
     public TransitionFade(VideoPlayController videoPlayController)
     {
         this.videoPlayController = videoPlayController;
@@ -20,15 +22,26 @@ public class TransitionFade : ITransitionPolicy
     {
         VideoPlayerWrapper current = transitionData.Current;
         VideoPlayerWrapper next = transitionData.Next;
-        float time = (transitionData as TransitionFadeData).Time;
+        float fadeTime = (transitionData as TransitionFadeData).Time;
 
         VideoPlayer currentPlayer = current.VideoPlayer;
         VideoPlayer nextPlayer = next.VideoPlayer;
 
         while (true)
         {
-            if (currentPlayer.length - currentPlayer.time <= time)
+            if (current.VideoPlayer.isLooping)
             {
+                continue;
+            }
+
+            if (currentPlayer.length - currentPlayer.time <= fadeTime)
+            {
+                // loop중 시간이 fadeTime에서 fadeLimit만큼 더 진행됐다면 다음 loop에서 transition이 진행되도록
+                if(currentPlayer.length - currentPlayer.time <= fadeTime - fadeLimit)
+                {
+                    continue;
+                }
+                
                 break;
             }
             yield return null;
@@ -38,7 +51,7 @@ public class TransitionFade : ITransitionPolicy
         ReadyFadeIn(next);
         while (currentPlayer.isPlaying)
         {
-            DoFadeOut(current, time, currentTime);
+            DoFadeOut(current, fadeTime, currentTime);
             currentTime += Time.deltaTime;
 
             WaitFadeIn(nextPlayer);
@@ -50,9 +63,9 @@ public class TransitionFade : ITransitionPolicy
         FinishFadeOut(current);
 
         currentTime = 0;
-        while (currentTime <= time)
+        while (currentTime <= fadeTime)
         {
-            DoFadeIn(next, time, currentTime);
+            DoFadeIn(next, fadeTime, currentTime);
 
             currentTime += Time.deltaTime;
             yield return null;
@@ -104,7 +117,7 @@ public class TransitionFade : ITransitionPolicy
     private void StartFadeIn(VideoPlayerWrapper next)
     {
         OnTransitionStart?.Invoke();
-        
+
         // fade in 할 텍스처를 검은색으로
         next.SetColor(0, 0, 0, 1);
         videoPlayController.PlayLoadedVideo(next.VideoPlayer.url);

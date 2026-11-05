@@ -4,11 +4,11 @@ using System.Collections;
 public class TransitionCut : ITransitionPolicy
 {
     public event Action OnTransitionStart;
-    
+
     private readonly VideoPlayController videoPlayController;
-    
+
     public TransitionPolicyEnum PolicyEnum { get; private set; } = TransitionPolicyEnum.Cut;
-    
+
     public TransitionCut(VideoPlayController videoPlayController)
     {
         this.videoPlayController = videoPlayController;
@@ -21,6 +21,11 @@ public class TransitionCut : ITransitionPolicy
 
         while (true)
         {
+            if (current.VideoPlayer.isLooping)
+            {
+                continue;
+            }
+            
             if (!current.VideoPlayer.isPlaying)
             {
                 DoTransition(current, next);
@@ -34,7 +39,7 @@ public class TransitionCut : ITransitionPolicy
     private void DoTransition(VideoPlayerWrapper current, VideoPlayerWrapper next)
     {
         OnTransitionStart?.Invoke();
-        
+
         current.EndVideo();
         videoPlayController.PlayLoadedVideo(next.VideoPlayer.url);
     }

@@ -10,6 +10,8 @@ public class TransitionDissolve : ITransitionPolicy
     private readonly VideoPlayController videoPlayController;
 
     public TransitionPolicyEnum PolicyEnum { get; private set; } = TransitionPolicyEnum.Dissolve;
+    
+    private readonly float dissolveLimit = 0.9f;
 
     public TransitionDissolve(VideoPlayController videoPlayController)
     {
@@ -20,13 +22,24 @@ public class TransitionDissolve : ITransitionPolicy
     {
         VideoPlayerWrapper current = transitionData.Current;
         VideoPlayerWrapper next = transitionData.Next;
-        float time = (transitionData as TransitionDissolveData).Time;
+        float dissolveTime = (transitionData as TransitionDissolveData).Time;
 
         VideoPlayer currentPlayer = current.VideoPlayer;
         while (true)
         {
-            if (currentPlayer.length - currentPlayer.time <= time)
+            if (current.VideoPlayer.isLooping)
             {
+                continue;
+            }
+
+            if (currentPlayer.length - currentPlayer.time <= dissolveTime)
+            {
+                // loop중 시간이 dissolveTime에서 dissolveLimit만큼 더 진행됐다면 다음 loop에서 transition이 진행되도록
+                if(currentPlayer.length - currentPlayer.time <= dissolveTime - dissolveLimit)
+                {
+                    continue;
+                }
+                
                 break;
             }
             yield return null;
@@ -36,7 +49,7 @@ public class TransitionDissolve : ITransitionPolicy
         float currentTime = 0;
         while (currentPlayer.isPlaying)
         {
-            DoTransition(current, next, time, currentTime);
+            DoTransition(current, next, dissolveTime, currentTime);
 
             currentTime += Time.deltaTime;
             yield return null;
