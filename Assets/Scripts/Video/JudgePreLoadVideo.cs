@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Video;
 using System;
+using System.Collections;
 
 public class JudgePreLoadVideo : MonoBehaviour
 {
@@ -9,12 +10,6 @@ public class JudgePreLoadVideo : MonoBehaviour
     private VideoPlayer currentVideoPlayer;
 
     private float loadNextVideoJudgeTime;
-    private bool isJudged;
-
-    private void Update()
-    {
-        JudgeLoadVideo();
-    }
 
     public void Initialize(LoadVideoRunTimeContext loadVideoRunTimeContext)
     {
@@ -26,23 +21,31 @@ public class JudgePreLoadVideo : MonoBehaviour
     /// </summary>
     public void StartNewJudge(VideoPlayer source)
     {
+        StopAllCoroutines();
+        
         currentVideoPlayer = source;
-        isJudged = false;
+        if (currentVideoPlayer == null)
+        {
+            return;
+        }
+        
+        StartCoroutine(JudgeLoadVideo());
     }
 
     /// <summary>
     /// 영상의 남은 길이를 측정해 pre load를 요청
     /// </summary>
-    private void JudgeLoadVideo()
+    private IEnumerator JudgeLoadVideo()
     {
-        if (currentVideoPlayer == null) return;
-        if (isJudged) return;
-
-        if (currentVideoPlayer.length - currentVideoPlayer.time <= loadNextVideoJudgeTime)
+        while (true)
         {
-            isJudged = true;
-            currentVideoPlayer = null;
-            OnPreLoadRequired?.Invoke();
+            if (currentVideoPlayer.length - currentVideoPlayer.time <= loadNextVideoJudgeTime)
+            {
+                currentVideoPlayer = null;
+                OnPreLoadRequired?.Invoke();
+                break;
+            }
+            yield return null;
         }
     }
 }
