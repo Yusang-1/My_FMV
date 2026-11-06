@@ -1,6 +1,6 @@
 using UnityEngine;
-using System;
 using UnityEngine.Video;
+using System;
 
 public class SubtitleController : MonoBehaviour
 {

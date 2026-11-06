@@ -1,0 +1,3 @@
+ID,StartTime,Duration,EndTime,ChoiceID
+C01_M_01,5,5,10,A/B
+C01_C_01,2,-1,1,C/D

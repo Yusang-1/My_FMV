@@ -1276,6 +1276,8 @@ MonoBehaviour:
   transition: {fileID: 209648389}
   subtitleController: {fileID: 859885553}
   subtitleLoader: {fileID: 859885555}
+  choiceController: {fileID: 850716169}
+  choiceLoader: {fileID: 850716168}
   branchController: {fileID: 1168360080}
   uIController: {fileID: 678698016}
 --- !u!4 &567449926
@@ -2089,6 +2091,78 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &850716166
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 850716170}
+  - component: {fileID: 850716169}
+  - component: {fileID: 850716168}
+  - component: {fileID: 850716167}
+  m_Layer: 0
+  m_Name: Choice Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &850716167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850716166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ad15e1630fa0164798b27bf278e40d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerConditionData: {fileID: 11400000, guid: 9888b90f8ce30744c9311cb3ab53ed47, type: 2}
+--- !u!114 &850716168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850716166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4289c44f664078498b43ab37d8b1cbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fileName: FMV_Subtitle_Test - Choice
+--- !u!114 &850716169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850716166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfd2918415ed4484b9499adb9df09164, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &850716170
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850716166}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 394.17886, y: 207.78465, z: -2.7632961}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &859885552
 GameObject:
   m_ObjectHideFlags: 0
@@ -2146,7 +2220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf3d5a060c375084b8a2f44f5b57e4a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fileName: FMV_Subtitle_Test
+  fileName: FMV_Subtitle_Test - Subtitle
 --- !u!1 &865053294
 GameObject:
   m_ObjectHideFlags: 0
@@ -4168,7 +4242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uIContainerSubtitle: {fileID: 779307645}
-  uIContainerSubtitleChoice: {fileID: 1791865699}
+  uIContainerChoice: {fileID: 0}
   uIContainerTimer: {fileID: 2098712993}
 --- !u!1 &2096653068
 GameObject:
@@ -4454,5 +4528,6 @@ SceneRoots:
   - {fileID: 1038659468}
   - {fileID: 1168360081}
   - {fileID: 859885554}
+  - {fileID: 850716170}
   - {fileID: 1235728488}
   - {fileID: 678698015}

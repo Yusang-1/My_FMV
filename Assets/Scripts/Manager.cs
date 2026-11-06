@@ -6,15 +6,20 @@ public class Manager : MonoBehaviour
     [SerializeField] private VideoTransition transition;
     [SerializeField] private SubtitleController subtitleController;
     [SerializeField] private SubtitleLoader subtitleLoader;
+    [SerializeField] private ChoiceController choiceController;
+    [SerializeField] private ChoiceLoader choiceLoader;
+    [SerializeField] private ChoiceActionDatas choiceActionDatas;
     [SerializeField] private BranchController branchController;
     [SerializeField] private UIController uIController;
 
-    private readonly SubtitleDatas datas = new();
+    private readonly SubtitleDatas subtitleDatas = new();
     private CurrentSubtitleDatas currentSubtitleDatas;
+    
+    private readonly ChoiceDatas choiceDatas = new();
 
     private void Awake()
     {
-        currentSubtitleDatas = new(datas);
+        currentSubtitleDatas = new(subtitleDatas, choiceDatas);
     }
 
     private void OnEnable()
@@ -35,6 +40,7 @@ public class Manager : MonoBehaviour
     private void BindEvents()
     {
         uIController.OnTestStartRequested += videoController.OnPlay;
+        uIController.InvokeChoiceAction += choiceActionDatas.Dispatch;
 
         subtitleController.OnStartShowSubtitleRequested += HandleShowSubtitle;
         subtitleController.OnRemoveSubtitleRequested += HandleRemoveSubtitle;
@@ -42,7 +48,15 @@ public class Manager : MonoBehaviour
         subtitleController.OnGetCurrentPlayerRequested += videoController.GetCurrentPlayer;
         subtitleController.OnGetNextSubtitleDataRequested += currentSubtitleDatas.GetSubtitleData;
 
-        subtitleLoader.OnParseSubtitleCompelete += datas.AddData;
+        subtitleLoader.OnParseSubtitleCompelete += subtitleDatas.AddData;
+        
+        choiceController.OnStartShowChoiceRequested += HandleShowChoice;
+        choiceController.OnRemoveChoiceRequested += HandleRemoveChoice;
+        choiceController.OnGetCurrentPlayerTimeRequest += videoController.GetCurrentPlayerTime;
+        choiceController.OnGetCurrentPlayerRequested += videoController.GetCurrentPlayer;
+        choiceController.OnGetNextChoiceDataRequested += currentSubtitleDatas.GetChoiceData;
+        
+        choiceLoader.OnParseChoiceCompelete += choiceDatas.AddData;
 
         transition.OnTransitionStart += branchController.SetCurrentNode;
 
@@ -53,6 +67,7 @@ public class Manager : MonoBehaviour
     private void UnbindEvents()
     {
         uIController.OnTestStartRequested -= videoController.OnPlay;
+        uIController.InvokeChoiceAction -= choiceActionDatas.Dispatch;
 
         subtitleController.OnStartShowSubtitleRequested -= HandleShowSubtitle;
         subtitleController.OnRemoveSubtitleRequested -= HandleRemoveSubtitle;
@@ -60,7 +75,15 @@ public class Manager : MonoBehaviour
         subtitleController.OnGetCurrentPlayerRequested -= videoController.GetCurrentPlayer;
         subtitleController.OnGetNextSubtitleDataRequested -= currentSubtitleDatas.GetSubtitleData;
 
-        subtitleLoader.OnParseSubtitleCompelete -= datas.AddData;
+        subtitleLoader.OnParseSubtitleCompelete -= subtitleDatas.AddData;
+        
+        choiceController.OnStartShowChoiceRequested -= HandleShowChoice;
+        choiceController.OnRemoveChoiceRequested -= HandleRemoveChoice;
+        choiceController.OnGetCurrentPlayerTimeRequest -= videoController.GetCurrentPlayerTime;
+        choiceController.OnGetCurrentPlayerRequested -= videoController.GetCurrentPlayer;
+        choiceController.OnGetNextChoiceDataRequested -= currentSubtitleDatas.GetChoiceData;
+        
+        choiceLoader.OnParseChoiceCompelete -= choiceDatas.AddData;
 
         transition.OnTransitionStart -= branchController.SetCurrentNode;
 
@@ -72,9 +95,16 @@ public class Manager : MonoBehaviour
     {
         uIController.OnShowSubtitleRequested?.Invoke(data);
     }
-
     private void HandleRemoveSubtitle(string id)
     {
         uIController.OnRemoveSubtitleRequested(id);
+    }
+    private void HandleShowChoice(ChoiceData data)
+    {
+        uIController.OnShowChoiceRequested?.Invoke(data);
+    }
+    private void HandleRemoveChoice(string id)
+    {
+        uIController.OnRemoveChoiceRequested(id);
     }
 }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 public class UIContainerSubtitle : MonoBehaviour
 {
-    [SerializeField] protected UISubtitle[] subtitles;
-    protected readonly Queue<UISubtitle> tmpQueue = new();
+    [SerializeField] private UISubtitle[] subtitles;
+    private readonly Queue<UISubtitle> tmpQueue = new();
 
-    protected readonly Dictionary<string, UISubtitle> subtitleByID = new();
+    private readonly Dictionary<string, UISubtitle> subtitleByID = new();
 
     private readonly char[] blank = { };
 

@@ -1,17 +1,17 @@
 using UnityEngine;
 using System;
-using System.Collections.Generic;
 
 public class UIContainerSubtitleTotal : MonoBehaviour
 {
     public Action<SubtitleData> OnShowSubtitleRequested;
     public Action<string> OnRemoveSubtitleRequested;
+    public Action<ChoiceData> OnShowChoiceRequested;
+    public Action<string> OnRemoveChoiceRequested;
+    public event Action<string> InvokeChoiceAction;
 
     [SerializeField] private UIContainerSubtitle uIContainerSubtitle;
-    [SerializeField] private UIContainerSubtitleChoice uIContainerSubtitleChoice;
+    [SerializeField] private UIContainerChoice uIContainerChoice;
     [SerializeField] private UIContainerTimer uIContainerTimer;
-
-    protected readonly Dictionary<string, UIContainerSubtitle> subtitleByID = new();
 
     private void OnEnable()
     {
@@ -27,40 +27,44 @@ public class UIContainerSubtitleTotal : MonoBehaviour
     {
         OnShowSubtitleRequested += ShowSubtitle;
         OnRemoveSubtitleRequested += RemoveSubtitle;
+
+        OnShowChoiceRequested += ShowChoice;
+        OnShowChoiceRequested += uIContainerChoice.SetChoiceID;
+        OnRemoveChoiceRequested += RemoveChoice;
+
+        uIContainerChoice.InvokeChoiceAction += HandleChoiceAction;
     }
 
     private void UnbindEvents()
     {
         OnShowSubtitleRequested -= ShowSubtitle;
         OnRemoveSubtitleRequested -= RemoveSubtitle;
+
+        OnShowChoiceRequested -= ShowChoice;
+        OnShowChoiceRequested -= uIContainerChoice.SetChoiceID;
+        OnRemoveChoiceRequested -= RemoveChoice;
+
+        uIContainerChoice.InvokeChoiceAction -= HandleChoiceAction;
     }
 
     private void ShowSubtitle(SubtitleData data)
     {
-        UIContainerSubtitle subtitleUI;
-
-        if (data.Type == SubtitleType.Default)
-        {
-            subtitleUI = uIContainerSubtitle;
-            subtitleUI.ShowSubtitle(data);
-        }
-        else
-        {
-            subtitleUI = uIContainerSubtitleChoice;
-            subtitleUI.ShowSubtitle(data);
-        }
-
-        subtitleByID.Add(data.ID, subtitleUI);
+        uIContainerSubtitle.ShowSubtitle(data);
     }
-
     private void RemoveSubtitle(string id)
     {
-        if (!subtitleByID.ContainsKey(id))
-        {
-            return;
-        }
-
-        subtitleByID[id].RemoveSubtitle(id);
-        subtitleByID.Remove(id);
+        uIContainerSubtitle.RemoveSubtitle(id);
+    }
+    private void ShowChoice(ChoiceData data)
+    {
+        uIContainerChoice.ShowChoice(data);
+    }
+    private void RemoveChoice(string id)
+    {
+        uIContainerChoice.RemoveSubtitle(id);
+    }
+    private void HandleChoiceAction(string choiceID)
+    {
+        InvokeChoiceAction?.Invoke(choiceID);
     }
 }

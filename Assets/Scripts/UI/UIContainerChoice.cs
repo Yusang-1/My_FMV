@@ -1,0 +1,106 @@
+using UnityEngine;
+using System;
+using System.Collections.Generic;
+
+public class UIContainerChoice : MonoBehaviour
+{
+    public event Action<string> InvokeChoiceAction;
+
+    [SerializeField] private UISubtitle[] subtitles;
+    private readonly Queue<UISubtitle> tmpQueue = new();
+
+    private readonly Dictionary<string, UISubtitle> subtitleByID = new();
+    private readonly List<string> choiceIDs = new();
+    private readonly char[] blank = { };
+
+    private void Start()
+    {
+        foreach (var tmp in subtitles)
+        {
+            tmpQueue.Enqueue(tmp);
+        }
+    }
+
+    public void ShowChoice(ChoiceData data)
+    {
+        // queue에서 사용하지 않는 tmp가져옴
+        UISubtitle subtitle;
+        if (tmpQueue.Count == 0)
+        {
+            Debug.LogWarning("queue에 subtitle tmp부족");
+            return;
+        }
+        else
+        {
+            subtitle = tmpQueue.Dequeue();
+        }
+
+        // textByID에 subtitle id와 tmp를 dictionary에 저장
+        if (subtitleByID.ContainsKey(data.ID))
+        {
+            subtitleByID[data.ID] = subtitle;
+        }
+        else
+        {
+            subtitleByID.Add(data.ID, subtitle);
+        }
+
+        // subtitle.SetText(data.Text_EN, data.Character);
+        subtitle.gameObject.SetActive(true);
+    }
+
+    public void RemoveSubtitle(string id)
+    {
+        if (!subtitleByID.ContainsKey(id))
+        {
+            return;
+        }
+
+        UISubtitle subtitle = subtitleByID[id];
+        subtitleByID.Remove(id);
+        tmpQueue.Enqueue(subtitle);
+        subtitle.SetText(blank, blank);
+        subtitle.gameObject.SetActive(false);
+    }
+
+    public void SetChoiceID(ChoiceData choiceData)
+    {
+        List<string> ids = choiceData.ChoiceIDs;
+        
+        for (int i = 0; i < ids.Count; i++)
+        {
+            if (i >= choiceIDs.Count)
+            {
+                break;
+            }
+
+            choiceIDs[i] = ids[i];
+        }
+
+        // 받아온 id 이상의 choiceIDs 인덱스는 빈칸으로
+        for (int i = ids.Count; i < choiceIDs.Count; i++)
+        {
+            choiceIDs[i] = null;
+        }
+    }
+
+    public void OnChoiceFirst()
+    {
+        if (choiceIDs[0] == null)
+        {
+            return;
+        }
+
+        InvokeChoiceAction?.Invoke(choiceIDs[0]);
+    }
+
+    public void OnChoiceSecond()
+    {
+        if (choiceIDs[1] == null)
+        {
+            return;
+        }
+
+        InvokeChoiceAction?.Invoke(choiceIDs[1]);
+    }
+}
