@@ -15,6 +15,11 @@ public class Manager : MonoBehaviour
 
     private readonly SubtitleRuntimeContext subtitleRuntimeContext = new();
 
+    private void Awake()
+    {
+        videoController.AwakeInitialize(branchController);
+    }
+
     private void OnEnable()
     {
         BindEvents();
@@ -27,7 +32,7 @@ public class Manager : MonoBehaviour
 
     private void Start()
     {
-        videoController.Initialize(branchController, transition);
+        videoController.Initialize(transition);
     }
 
     private void BindEvents()
@@ -54,8 +59,6 @@ public class Manager : MonoBehaviour
         choiceLoader.OnParseChoiceCompelete += subtitleRuntimeContext.ChoiceDatas.AddData;
 
         choiceTextLoader.OnParseChoiceCompelete += subtitleRuntimeContext.ChoiceTextDatas.AddData;
-
-        transition.OnTransitionStart += branchController.SetCurrentNode;
 
         branchController.OnCurrentNodeChanged += subtitleRuntimeContext.CurrentSubtitleDatas.SetCurrentNodeSubtitleDatas;
         branchController.OnChangeCurrentNodeFinished += subtitleController.GetSubtitleDataOnLoadNextNode;
@@ -85,8 +88,6 @@ public class Manager : MonoBehaviour
         choiceLoader.OnParseChoiceCompelete -= subtitleRuntimeContext.ChoiceDatas.AddData;
 
         choiceTextLoader.OnParseChoiceCompelete -= subtitleRuntimeContext.ChoiceTextDatas.AddData;
-
-        transition.OnTransitionStart -= branchController.SetCurrentNode;
 
         branchController.OnCurrentNodeChanged -= subtitleRuntimeContext.CurrentSubtitleDatas.SetCurrentNodeSubtitleDatas;
         branchController.OnChangeCurrentNodeFinished -= subtitleController.GetSubtitleDataOnLoadNextNode;

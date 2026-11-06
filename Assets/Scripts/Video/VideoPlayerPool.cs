@@ -32,6 +32,22 @@ public class VideoPlayerPool : MonoBehaviour
             wrapperDict.Add(wrapper.VideoPlayer, wrapper);
         }
     }
+    
+    public void BindEvents(BranchController branchController)
+    {
+        foreach (var wrapper in stack)
+        {
+            wrapper.OnNodePlayed += branchController.SetCurrentNode;
+        }
+    }
+    
+    public void UnbindEvents(BranchController branchController)
+    {
+        foreach (var wrapper in stack)
+        {
+            wrapper.OnNodePlayed -= branchController.SetCurrentNode;
+        }
+    }
 
     public bool TryGetValue(out VideoPlayerWrapper videoPlayerWrapper)
     {

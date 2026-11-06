@@ -23,15 +23,18 @@ public class VideoController : MonoBehaviour
     public string cloudFrontShortVideoUrl2 = "Https://d2vwjcp3kqcnox.cloudfront.net/Nat-Landscape-2.mp4";
     public string cloudFrontShortVideoUrl3 = "Https://d2vwjcp3kqcnox.cloudfront.net/Nat-Volcano-1.mp4";
 
+    public void AwakeInitialize(BranchController branchController)
+    {
+        this.branchController = branchController;
+    }
+    
     private void OnEnable()
     {
         BindEvents();
     }
 
-    public void Initialize(BranchController branchController, VideoTransition transition)
+    public void Initialize(VideoTransition transition)
     {
-        this.branchController = branchController;
-
         transition.Initialize(videoPlayController);
         judgePreLoad.Initialize(loadVideoRunTimeContext);
         videoPlayController.Initialize(pool, loader, judgePreLoad, transition, branchController, loadedVideoController);
@@ -47,6 +50,8 @@ public class VideoController : MonoBehaviour
         loader.OnVideoPreparedEvent += loadedVideoController.AddLoadedVideo;
 
         judgePreLoad.OnPreLoadRequired += videoPlayController.ReserveNextVideo;
+
+        pool.BindEvents(branchController);
     }
 
     private void UnbindEvents()
@@ -54,6 +59,8 @@ public class VideoController : MonoBehaviour
         loader.OnVideoPreparedEvent -= loadedVideoController.AddLoadedVideo;
 
         judgePreLoad.OnPreLoadRequired -= videoPlayController.ReserveNextVideo;
+
+        pool.UnbindEvents(branchController);
     }
 
     public void OnPlay()

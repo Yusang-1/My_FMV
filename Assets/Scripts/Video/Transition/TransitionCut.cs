@@ -1,10 +1,7 @@
-using System;
 using System.Collections;
 
 public class TransitionCut : ITransitionPolicy
 {
-    public event Action OnTransitionStart;
-
     private readonly VideoPlayController videoPlayController;
 
     public TransitionPolicyEnum PolicyEnum { get; private set; } = TransitionPolicyEnum.Cut;
@@ -38,8 +35,6 @@ public class TransitionCut : ITransitionPolicy
 
     private void DoTransition(VideoPlayerWrapper current, VideoPlayerWrapper next)
     {
-        OnTransitionStart?.Invoke();
-
         current.EndVideo();
         videoPlayController.PlayLoadedVideo(next.GetLoadedNodeCode());
     }

@@ -1,12 +1,9 @@
 using UnityEngine;
 using UnityEngine.Video;
-using System;
 using System.Collections;
 
 public class TransitionFade : ITransitionPolicy
 {
-    public event Action OnTransitionStart;
-
     private readonly VideoPlayController videoPlayController;
 
     public TransitionPolicyEnum PolicyEnum { get; private set; } = TransitionPolicyEnum.Fade;
@@ -116,8 +113,6 @@ public class TransitionFade : ITransitionPolicy
 
     private void StartFadeIn(VideoPlayerWrapper next)
     {
-        OnTransitionStart?.Invoke();
-
         // fade in 할 텍스처를 검은색으로
         next.SetColor(0, 0, 0, 1);
         videoPlayController.PlayLoadedVideo(next.GetLoadedNodeCode());

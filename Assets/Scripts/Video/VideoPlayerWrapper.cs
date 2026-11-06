@@ -8,6 +8,7 @@ public class VideoPlayerWrapper : MonoBehaviour
 {
     public event Action OnVideoPlayerUsed;
     public event Action<VideoPlayerWrapper> OnVideoPlayerUnused;
+    public event Action<NodeSO> OnNodePlayed;
 
     public VideoPlayer VideoPlayer { get; private set; }
     private NodeSO nodeData;
@@ -84,6 +85,8 @@ public class VideoPlayerWrapper : MonoBehaviour
                 SetLoop(false);
             }
         }
+        
+        OnNodePlayed?.Invoke(nodeData);
     }
 
     public void EndVideo()
