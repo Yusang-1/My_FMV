@@ -4,7 +4,8 @@ using System;
 
 public class VideoLoader : MonoBehaviour
 {
-    public event Action<VideoPlayer, int> OnVideoPreparedEvent;
+    public event Action<VideoPlayer, string> OnVideoPreparedEvent;
+    public event Func<VideoPlayer, VideoPlayerWrapper> OnGetWrapperRequested;
     public event Action OnErrorOccurred;
 
     [Header("[ UI Setting ]")]
@@ -16,18 +17,19 @@ public class VideoLoader : MonoBehaviour
         wrapper.gameObject.SetActive(true);
 
         wrapper.LoadVideo(nodeData);
-        
+
         BindEvents(wrapper.VideoPlayer);
 
         // 영상 로딩(버퍼링) UI 켜고 준비 시작
-        if (loadingIndicatorUI != null) loadingIndicatorUI.SetActive(true);        
+        if (loadingIndicatorUI != null) loadingIndicatorUI.SetActive(true);
     }
 
     private void OnVideoPrepared(VideoPlayer source)
     {
         if (loadingIndicatorUI != null) loadingIndicatorUI.SetActive(false);
 
-        int code = source.url.GetHashCode();
+        var wrapper = OnGetWrapperRequested?.Invoke(source);
+        string code = wrapper.GetLoadedNodeCode();
         OnVideoPreparedEvent?.Invoke(source, code);
         Debug.Log($"스트리밍 준비 완료!\n{source.url}");
 

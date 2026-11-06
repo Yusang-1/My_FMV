@@ -41,6 +41,6 @@ public class TransitionCut : ITransitionPolicy
         OnTransitionStart?.Invoke();
 
         current.EndVideo();
-        videoPlayController.PlayLoadedVideo(next.VideoPlayer.url);
+        videoPlayController.PlayLoadedVideo(next.GetLoadedNodeCode());
     }
 }

@@ -63,7 +63,7 @@ public class TransitionDissolve : ITransitionPolicy
 
         // next의 alpha를 0으로
         next.SetAlpha(0);
-        videoPlayController.PlayLoadedVideo(next.VideoPlayer.url);
+        videoPlayController.PlayLoadedVideo(next.GetLoadedNodeCode());
     }
 
     private void DoTransition(VideoPlayerWrapper current, VideoPlayerWrapper next, float totalTime, float currentTime)

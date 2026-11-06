@@ -58,18 +58,17 @@ public class VideoController : MonoBehaviour
 
     public void OnPlay()
     {
-        string address = default;
+        NodeSO node = default;
 
         if (pool.TryGetValue(out VideoPlayerWrapper wrapper))
         {
-            NodeSO node = branchController.GetStartNode();
+            node = branchController.GetStartNode();
             if (node == null) return;
 
-            address = node.VideoAdress;
             loader.LoadVideo(wrapper, node);
         }
 
-        videoPlayController.PlayLoadedVideo(address);
+        videoPlayController.PlayLoadedVideo(node.Code);
 
         OnFirstPlayVideo?.Invoke();
     }

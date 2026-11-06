@@ -120,7 +120,7 @@ public class TransitionFade : ITransitionPolicy
 
         // fade in 할 텍스처를 검은색으로
         next.SetColor(0, 0, 0, 1);
-        videoPlayController.PlayLoadedVideo(next.VideoPlayer.url);
+        videoPlayController.PlayLoadedVideo(next.GetLoadedNodeCode());
     }
 
     private void DoFadeIn(VideoPlayerWrapper next, float totalTime, float currentTime)

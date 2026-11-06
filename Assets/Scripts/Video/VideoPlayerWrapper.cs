@@ -17,7 +17,7 @@ public class VideoPlayerWrapper : MonoBehaviour
     {
         VideoPlayer = GetComponent<VideoPlayer>();
         VideoPlayer.source = VideoSource.Url;
-        
+
         // 모바일/PC 하드웨어 가속 및 성능 최적화 옵션 켜기
         VideoPlayer.skipOnDrop = true; // 프레임 드랍 발생 시 오디오 동기화를 위해 프레임 스킵
     }
@@ -42,11 +42,21 @@ public class VideoPlayerWrapper : MonoBehaviour
         OnVideoPlayerUnused?.Invoke(this);
     }
 
+    public string GetLoadedNodeCode()
+    {
+        if (nodeData == null)
+        {
+            return null;
+        }
+
+        return nodeData.Code;
+    }
+
     public void LoadVideo(NodeSO nodeData)
     {
         this.nodeData = nodeData;
 
-        VideoPlayer.url = nodeData.VideoAdress;        
+        VideoPlayer.url = nodeData.VideoAdress;
 
         Debug.Log("CloudFront 스트리밍 준비 시작...");
         VideoPlayer.Prepare();

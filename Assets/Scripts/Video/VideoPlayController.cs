@@ -27,21 +27,21 @@ public class VideoPlayController : MonoBehaviour
     /// <summary>
     /// address를 load완료한 VideoPlayer가 loadedVideoController에 있다면 재생
     /// </summary>
-    public void PlayLoadedVideo(string url)
+    public void PlayLoadedVideo(string nodeCode)
     {
-        StartCoroutine(WaitForLoadedPlayer(url));
+        StartCoroutine(WaitForLoadedPlayer(nodeCode));
     }
 
     /// <summary>
     /// address를 load완료한 VideoPlayer가 loadedVideoController에 있다면 재생
     /// </summary>
-    private IEnumerator WaitForLoadedPlayer(string address)
+    private IEnumerator WaitForLoadedPlayer(string nodeCode)
     {
         bool isLoaded = false;
 
         while (!isLoaded)
         {
-            isLoaded = loadedVideoController.TryGetLoadedPlayer(address.GetHashCode(), out VideoPlayer videoPlayer);
+            isLoaded = loadedVideoController.TryGetLoadedPlayer(nodeCode, out VideoPlayer videoPlayer);
             if (isLoaded)
             {
                 currentVideoPlayer = videoPlayer;
