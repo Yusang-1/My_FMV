@@ -13,15 +13,7 @@ public class Manager : MonoBehaviour
     [SerializeField] private BranchController branchController;
     [SerializeField] private UIController uIController;
 
-    private readonly SubtitleDatas subtitleDatas = new();
-    private readonly ChoiceDatas choiceDatas = new();
-    private readonly ChoiceTextDatas choiceTextDatas = new();
-    private CurrentSubtitleDatas currentSubtitleDatas;
-
-    private void Awake()
-    {
-        currentSubtitleDatas = new(subtitleDatas, choiceDatas);
-    }
+    private readonly SubtitleRuntimeContext subtitleRuntimeContext = new();
 
     private void OnEnable()
     {
@@ -47,24 +39,25 @@ public class Manager : MonoBehaviour
         subtitleController.OnRemoveSubtitleRequested += HandleRemoveSubtitle;
         subtitleController.OnGetCurrentPlayerTimeRequest += videoController.GetCurrentPlayerTime;
         subtitleController.OnGetCurrentPlayerRequested += videoController.GetCurrentPlayer;
-        subtitleController.OnGetNextSubtitleDataRequested += currentSubtitleDatas.GetSubtitleData;
+        subtitleController.OnGetNextSubtitleDataRequested += subtitleRuntimeContext.CurrentSubtitleDatas.GetSubtitleData;
 
-        subtitleLoader.OnParseSubtitleCompelete += subtitleDatas.AddData;
+        subtitleLoader.OnParseSubtitleCompelete += subtitleRuntimeContext.SubtitleDatas.AddData;
 
         choiceController.OnStartShowChoiceRequested += HandleShowChoice;
+        choiceController.OnStartSetChoiceRequested += HandleSetChoice;
         choiceController.OnRemoveChoiceRequested += HandleRemoveChoice;
         choiceController.OnGetCurrentPlayerTimeRequest += videoController.GetCurrentPlayerTime;
         choiceController.OnGetCurrentPlayerRequested += videoController.GetCurrentPlayer;
-        choiceController.OnGetNextChoiceDataRequested += currentSubtitleDatas.GetChoiceData;
-        choiceController.OnGetChoiceTextRequested += choiceTextDatas.GetData;
+        choiceController.OnGetNextChoiceDataRequested += subtitleRuntimeContext.CurrentSubtitleDatas.GetChoiceData;
+        choiceController.OnGetChoiceTextRequested += subtitleRuntimeContext.ChoiceTextDatas.GetData;
 
-        choiceLoader.OnParseChoiceCompelete += choiceDatas.AddData;
+        choiceLoader.OnParseChoiceCompelete += subtitleRuntimeContext.ChoiceDatas.AddData;
 
-        choiceTextLoader.OnParseChoiceCompelete += choiceTextDatas.AddData;
+        choiceTextLoader.OnParseChoiceCompelete += subtitleRuntimeContext.ChoiceTextDatas.AddData;
 
         transition.OnTransitionStart += branchController.SetCurrentNode;
 
-        branchController.OnCurrentNodeChanged += currentSubtitleDatas.SetCurrentNodeSubtitleDatas;
+        branchController.OnCurrentNodeChanged += subtitleRuntimeContext.CurrentSubtitleDatas.SetCurrentNodeSubtitleDatas;
         branchController.OnChangeCurrentNodeFinished += subtitleController.GetSubtitleDataOnLoadNextNode;
     }
 
@@ -77,24 +70,25 @@ public class Manager : MonoBehaviour
         subtitleController.OnRemoveSubtitleRequested -= HandleRemoveSubtitle;
         subtitleController.OnGetCurrentPlayerTimeRequest -= videoController.GetCurrentPlayerTime;
         subtitleController.OnGetCurrentPlayerRequested -= videoController.GetCurrentPlayer;
-        subtitleController.OnGetNextSubtitleDataRequested -= currentSubtitleDatas.GetSubtitleData;
+        subtitleController.OnGetNextSubtitleDataRequested -= subtitleRuntimeContext.CurrentSubtitleDatas.GetSubtitleData;
 
-        subtitleLoader.OnParseSubtitleCompelete -= subtitleDatas.AddData;
+        subtitleLoader.OnParseSubtitleCompelete -= subtitleRuntimeContext.SubtitleDatas.AddData;
 
         choiceController.OnStartShowChoiceRequested -= HandleShowChoice;
+        choiceController.OnStartSetChoiceRequested -= HandleSetChoice;
         choiceController.OnRemoveChoiceRequested -= HandleRemoveChoice;
         choiceController.OnGetCurrentPlayerTimeRequest -= videoController.GetCurrentPlayerTime;
         choiceController.OnGetCurrentPlayerRequested -= videoController.GetCurrentPlayer;
-        choiceController.OnGetNextChoiceDataRequested -= currentSubtitleDatas.GetChoiceData;
-        choiceController.OnGetChoiceTextRequested -= choiceTextDatas.GetData;
+        choiceController.OnGetNextChoiceDataRequested -= subtitleRuntimeContext.CurrentSubtitleDatas.GetChoiceData;
+        choiceController.OnGetChoiceTextRequested -= subtitleRuntimeContext.ChoiceTextDatas.GetData;
 
-        choiceLoader.OnParseChoiceCompelete -= choiceDatas.AddData;
+        choiceLoader.OnParseChoiceCompelete -= subtitleRuntimeContext.ChoiceDatas.AddData;
 
-        choiceTextLoader.OnParseChoiceCompelete -= choiceTextDatas.AddData;
+        choiceTextLoader.OnParseChoiceCompelete -= subtitleRuntimeContext.ChoiceTextDatas.AddData;
 
         transition.OnTransitionStart -= branchController.SetCurrentNode;
 
-        branchController.OnCurrentNodeChanged -= currentSubtitleDatas.SetCurrentNodeSubtitleDatas;
+        branchController.OnCurrentNodeChanged -= subtitleRuntimeContext.CurrentSubtitleDatas.SetCurrentNodeSubtitleDatas;
         branchController.OnChangeCurrentNodeFinished -= subtitleController.GetSubtitleDataOnLoadNextNode;
     }
 
