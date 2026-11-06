@@ -7,6 +7,7 @@ public class ChoiceController : MonoBehaviour
     public event Func<ChoiceData> OnGetNextChoiceDataRequested;
     public event Func<float> OnGetCurrentPlayerTimeRequest;
     public event Func<VideoPlayer> OnGetCurrentPlayerRequested;
+    public event Action OnChoiceSelected;
 
     // ChoiceShower 연결 event
     public event Action<string, string> OnStartShowChoiceRequested;
@@ -35,12 +36,15 @@ public class ChoiceController : MonoBehaviour
 
     private void Update()
     {
-        JudgeChoiceTime();
+        JudgeChoiceShowTime();
 
         choiceShower.Update();
     }
 
-    private void JudgeChoiceTime()
+    /// <summary>
+    /// choice를 보여줄 시간을 판별
+    /// </summary>
+    private void JudgeChoiceShowTime()
     {
         if (TryGetCurrentPlayerTime(out float currentTime))
         {
@@ -117,6 +121,14 @@ public class ChoiceController : MonoBehaviour
         {
             GetNextChoiceData(0);
         }
+    }
+    
+    /// <summary>
+    /// 선택지가 선택되었을 때 호출
+    /// </summary>
+    public void ChoiceSelected()
+    {
+        OnChoiceSelected?.Invoke();
     }
 
     private void HandleRemoveChoice(string id)
