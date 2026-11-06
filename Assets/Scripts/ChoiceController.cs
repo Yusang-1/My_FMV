@@ -9,8 +9,10 @@ public class ChoiceController : MonoBehaviour
     public event Func<VideoPlayer> OnGetCurrentPlayerRequested;
 
     // ChoiceShower 연결 event
-    public event Action<ChoiceData> OnStartShowChoiceRequested;
+    public event Action<string, string> OnStartShowChoiceRequested;
+    public event Action<ChoiceData> OnStartSetChoiceRequested;
     public event Action<string> OnRemoveChoiceRequested;
+    public event Func<string, ChoiceTextData> OnGetChoiceTextRequested;
 
     private readonly ChoiceShower choiceShower = new();
     private ChoiceData currentChoiceData;
@@ -18,13 +20,17 @@ public class ChoiceController : MonoBehaviour
     private void OnEnable()
     {
         choiceShower.OnStartShowChoiceRequested += HandleStartShowChoice;
+        choiceShower.OnStartSetChoiceRequested += HandleStartSetChoice;
         choiceShower.OnRemoveChoiceRequested += HandleRemoveChoice;
+        choiceShower.OnGetChoiceTextRequested += HandleGetChoiceText;
     }
 
     private void OnDisable()
     {
         choiceShower.OnStartShowChoiceRequested -= HandleStartShowChoice;
+        choiceShower.OnStartSetChoiceRequested -= HandleStartSetChoice;
         choiceShower.OnRemoveChoiceRequested -= HandleRemoveChoice;
+        choiceShower.OnGetChoiceTextRequested -= HandleGetChoiceText;
     }
 
     private void Update()
@@ -86,7 +92,7 @@ public class ChoiceController : MonoBehaviour
     public void ShowChoice(ChoiceData choiceData, float currentTime)
     {
         VideoPlayer videoPlayer = OnGetCurrentPlayerRequested?.Invoke();
-        // choiceShower.StartShowChoice(videoPlayer, choiceData);
+        choiceShower.StartShowChoice(videoPlayer, choiceData);
 
         GetNextChoiceData(currentTime);
     }
@@ -117,9 +123,16 @@ public class ChoiceController : MonoBehaviour
     {
         OnRemoveChoiceRequested?.Invoke(id);
     }
-
-    private void HandleStartShowChoice(ChoiceData choiceData)
+    private void HandleStartShowChoice(string id, string text)
     {
-        OnStartShowChoiceRequested?.Invoke(choiceData);
+        OnStartShowChoiceRequested?.Invoke(id, text);
+    }
+    private void HandleStartSetChoice(ChoiceData choiceData)
+    {
+        OnStartSetChoiceRequested?.Invoke(choiceData);
+    }
+    private ChoiceTextData HandleGetChoiceText(string choiceID)
+    {
+        return OnGetChoiceTextRequested?.Invoke(choiceID);
     }
 }

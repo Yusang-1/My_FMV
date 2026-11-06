@@ -1278,6 +1278,8 @@ MonoBehaviour:
   subtitleLoader: {fileID: 859885555}
   choiceController: {fileID: 850716169}
   choiceLoader: {fileID: 850716168}
+  choiceActionDatas: {fileID: 850716167}
+  choiceTextLoader: {fileID: 850716171}
   branchController: {fileID: 1168360080}
   uIController: {fileID: 678698016}
 --- !u!4 &567449926
@@ -2103,6 +2105,7 @@ GameObject:
   - component: {fileID: 850716169}
   - component: {fileID: 850716168}
   - component: {fileID: 850716167}
+  - component: {fileID: 850716171}
   m_Layer: 0
   m_Name: Choice Controller
   m_TagString: Untagged
@@ -2157,12 +2160,25 @@ Transform:
   m_GameObject: {fileID: 850716166}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 394.17886, y: 207.78465, z: -2.7632961}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &850716171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850716166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 742c6874c767deb459ff2ee76b858da0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fileName: FMV_Subtitle_Test - ChoiceText
 --- !u!1 &859885552
 GameObject:
   m_ObjectHideFlags: 0
@@ -2832,7 +2848,7 @@ Transform:
   m_GameObject: {fileID: 1168360079}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 278.90942, y: 200.16357, z: -13.596529}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

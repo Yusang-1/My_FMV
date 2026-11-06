@@ -9,13 +9,14 @@ public class Manager : MonoBehaviour
     [SerializeField] private ChoiceController choiceController;
     [SerializeField] private ChoiceLoader choiceLoader;
     [SerializeField] private ChoiceActionDatas choiceActionDatas;
+    [SerializeField] private ChoiceTextLoader choiceTextLoader;
     [SerializeField] private BranchController branchController;
     [SerializeField] private UIController uIController;
 
     private readonly SubtitleDatas subtitleDatas = new();
-    private CurrentSubtitleDatas currentSubtitleDatas;
-    
     private readonly ChoiceDatas choiceDatas = new();
+    private readonly ChoiceTextDatas choiceTextDatas = new();
+    private CurrentSubtitleDatas currentSubtitleDatas;
 
     private void Awake()
     {
@@ -49,14 +50,17 @@ public class Manager : MonoBehaviour
         subtitleController.OnGetNextSubtitleDataRequested += currentSubtitleDatas.GetSubtitleData;
 
         subtitleLoader.OnParseSubtitleCompelete += subtitleDatas.AddData;
-        
+
         choiceController.OnStartShowChoiceRequested += HandleShowChoice;
         choiceController.OnRemoveChoiceRequested += HandleRemoveChoice;
         choiceController.OnGetCurrentPlayerTimeRequest += videoController.GetCurrentPlayerTime;
         choiceController.OnGetCurrentPlayerRequested += videoController.GetCurrentPlayer;
         choiceController.OnGetNextChoiceDataRequested += currentSubtitleDatas.GetChoiceData;
-        
+        choiceController.OnGetChoiceTextRequested += choiceTextDatas.GetData;
+
         choiceLoader.OnParseChoiceCompelete += choiceDatas.AddData;
+
+        choiceTextLoader.OnParseChoiceCompelete += choiceTextDatas.AddData;
 
         transition.OnTransitionStart += branchController.SetCurrentNode;
 
@@ -76,14 +80,17 @@ public class Manager : MonoBehaviour
         subtitleController.OnGetNextSubtitleDataRequested -= currentSubtitleDatas.GetSubtitleData;
 
         subtitleLoader.OnParseSubtitleCompelete -= subtitleDatas.AddData;
-        
+
         choiceController.OnStartShowChoiceRequested -= HandleShowChoice;
         choiceController.OnRemoveChoiceRequested -= HandleRemoveChoice;
         choiceController.OnGetCurrentPlayerTimeRequest -= videoController.GetCurrentPlayerTime;
         choiceController.OnGetCurrentPlayerRequested -= videoController.GetCurrentPlayer;
         choiceController.OnGetNextChoiceDataRequested -= currentSubtitleDatas.GetChoiceData;
-        
+        choiceController.OnGetChoiceTextRequested -= choiceTextDatas.GetData;
+
         choiceLoader.OnParseChoiceCompelete -= choiceDatas.AddData;
+
+        choiceTextLoader.OnParseChoiceCompelete -= choiceTextDatas.AddData;
 
         transition.OnTransitionStart -= branchController.SetCurrentNode;
 
@@ -99,9 +106,13 @@ public class Manager : MonoBehaviour
     {
         uIController.OnRemoveSubtitleRequested(id);
     }
-    private void HandleShowChoice(ChoiceData data)
+    private void HandleShowChoice(string id, string text)
     {
-        uIController.OnShowChoiceRequested?.Invoke(data);
+        uIController.OnShowChoiceRequested?.Invoke(id, text);
+    }
+    private void HandleSetChoice(ChoiceData data)
+    {
+        uIController.OnSetChoiceRequested?.Invoke(data);
     }
     private void HandleRemoveChoice(string id)
     {

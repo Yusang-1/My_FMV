@@ -5,7 +5,8 @@ public class UIContainerSubtitleTotal : MonoBehaviour
 {
     public Action<SubtitleData> OnShowSubtitleRequested;
     public Action<string> OnRemoveSubtitleRequested;
-    public Action<ChoiceData> OnShowChoiceRequested;
+    public Action<ChoiceData> OnSetChoiceRequested;
+    public Action<string, string> OnShowChoiceRequested;
     public Action<string> OnRemoveChoiceRequested;
     public event Action<string> InvokeChoiceAction;
 
@@ -25,44 +26,28 @@ public class UIContainerSubtitleTotal : MonoBehaviour
 
     private void BindEvents()
     {
-        OnShowSubtitleRequested += ShowSubtitle;
-        OnRemoveSubtitleRequested += RemoveSubtitle;
+        OnShowSubtitleRequested += uIContainerSubtitle.ShowSubtitle;
+        OnRemoveSubtitleRequested += uIContainerSubtitle.RemoveSubtitle;
 
-        OnShowChoiceRequested += ShowChoice;
-        OnShowChoiceRequested += uIContainerChoice.SetChoiceID;
-        OnRemoveChoiceRequested += RemoveChoice;
+        OnShowChoiceRequested += uIContainerChoice.ShowChoice;
+        OnSetChoiceRequested += uIContainerChoice.SetChoiceID;
+        OnRemoveChoiceRequested += uIContainerChoice.RemoveSubtitle;
 
         uIContainerChoice.InvokeChoiceAction += HandleChoiceAction;
     }
 
     private void UnbindEvents()
     {
-        OnShowSubtitleRequested -= ShowSubtitle;
-        OnRemoveSubtitleRequested -= RemoveSubtitle;
+        OnShowSubtitleRequested -= uIContainerSubtitle.ShowSubtitle;
+        OnRemoveSubtitleRequested -= uIContainerSubtitle.RemoveSubtitle;
 
-        OnShowChoiceRequested -= ShowChoice;
-        OnShowChoiceRequested -= uIContainerChoice.SetChoiceID;
-        OnRemoveChoiceRequested -= RemoveChoice;
+        OnShowChoiceRequested -= uIContainerChoice.ShowChoice;
+        OnSetChoiceRequested -= uIContainerChoice.SetChoiceID;
+        OnRemoveChoiceRequested -= uIContainerChoice.RemoveSubtitle;
 
         uIContainerChoice.InvokeChoiceAction -= HandleChoiceAction;
     }
 
-    private void ShowSubtitle(SubtitleData data)
-    {
-        uIContainerSubtitle.ShowSubtitle(data);
-    }
-    private void RemoveSubtitle(string id)
-    {
-        uIContainerSubtitle.RemoveSubtitle(id);
-    }
-    private void ShowChoice(ChoiceData data)
-    {
-        uIContainerChoice.ShowChoice(data);
-    }
-    private void RemoveChoice(string id)
-    {
-        uIContainerChoice.RemoveSubtitle(id);
-    }
     private void HandleChoiceAction(string choiceID)
     {
         InvokeChoiceAction?.Invoke(choiceID);

@@ -6,7 +6,8 @@ public class UIController : MonoBehaviour
     public event Action OnTestStartRequested;
     public Action<SubtitleData> OnShowSubtitleRequested;
     public Action<string> OnRemoveSubtitleRequested;
-    public Action<ChoiceData> OnShowChoiceRequested;
+    public Action<string, string> OnShowChoiceRequested;
+    public Action<ChoiceData> OnSetChoiceRequested;
     public Action<string> OnRemoveChoiceRequested;
     public event Action<string> InvokeChoiceAction;
 
@@ -26,26 +27,28 @@ public class UIController : MonoBehaviour
     private void BindEvents()
     {
         uITestStart.OnTestStartRequested += HandleTestStart;
-        
+
         uIContainerSubtitleTotal.InvokeChoiceAction += HandleChoiceAction;
 
         OnShowSubtitleRequested += HandleShowSubtitle;
         OnRemoveSubtitleRequested += HandleRemoveSubtitle;
-        
+
         OnShowChoiceRequested += HandleShowChoice;
+        OnSetChoiceRequested += HandleSetChoice;
         OnRemoveChoiceRequested += HandleRemoveChoice;
     }
 
     private void UnbindEvents()
     {
         uITestStart.OnTestStartRequested -= HandleTestStart;
-        
+
         uIContainerSubtitleTotal.InvokeChoiceAction -= HandleChoiceAction;
 
         OnShowSubtitleRequested -= HandleShowSubtitle;
         OnRemoveSubtitleRequested -= HandleRemoveSubtitle;
-        
+
         OnShowChoiceRequested -= HandleShowChoice;
+        OnSetChoiceRequested -= HandleSetChoice;
         OnRemoveChoiceRequested -= HandleRemoveChoice;
     }
 
@@ -61,9 +64,13 @@ public class UIController : MonoBehaviour
     {
         uIContainerSubtitleTotal.OnRemoveSubtitleRequested?.Invoke(id);
     }
-    private void HandleShowChoice(ChoiceData data)
+    private void HandleShowChoice(string id, string text)
     {
-        uIContainerSubtitleTotal.OnShowChoiceRequested?.Invoke(data);
+        uIContainerSubtitleTotal.OnShowChoiceRequested?.Invoke(id, text);
+    }
+    private void HandleSetChoice(ChoiceData data)
+    {
+        uIContainerSubtitleTotal.OnSetChoiceRequested?.Invoke(data);
     }
     private void HandleRemoveChoice(string id)
     {

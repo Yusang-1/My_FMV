@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class UIContainerChoice : MonoBehaviour
 {
-    public event Action<string> InvokeChoiceAction;
+    public event Action<string> InvokeChoiceAction;    
 
     [SerializeField] private UISubtitle[] subtitles;
     private readonly Queue<UISubtitle> tmpQueue = new();
@@ -21,7 +21,7 @@ public class UIContainerChoice : MonoBehaviour
         }
     }
 
-    public void ShowChoice(ChoiceData data)
+    public void ShowChoice(string id, string text)
     {
         // queue에서 사용하지 않는 tmp가져옴
         UISubtitle subtitle;
@@ -36,16 +36,16 @@ public class UIContainerChoice : MonoBehaviour
         }
 
         // textByID에 subtitle id와 tmp를 dictionary에 저장
-        if (subtitleByID.ContainsKey(data.ID))
+        if (subtitleByID.ContainsKey(id))
         {
-            subtitleByID[data.ID] = subtitle;
+            subtitleByID[id] = subtitle;
         }
         else
         {
-            subtitleByID.Add(data.ID, subtitle);
+            subtitleByID.Add(id, subtitle);
         }
 
-        // subtitle.SetText(data.Text_EN, data.Character);
+        subtitle.SetText(text, null);
         subtitle.gameObject.SetActive(true);
     }
 
