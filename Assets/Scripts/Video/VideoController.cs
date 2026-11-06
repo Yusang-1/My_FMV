@@ -66,7 +66,7 @@ public class VideoController : MonoBehaviour
             if (node == null) return;
 
             address = node.VideoAdress;
-            loader.LoadVideo(wrapper, address);
+            loader.LoadVideo(wrapper, node);
         }
 
         videoPlayController.PlayLoadedVideo(address);

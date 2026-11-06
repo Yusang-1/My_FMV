@@ -11,13 +11,14 @@ public class VideoLoader : MonoBehaviour
     [Tooltip("영상이 버퍼링/로딩 중일 때 띄워줄 UI 오브젝트")]
     [SerializeField] private GameObject loadingIndicatorUI;
 
-    public void LoadVideo(VideoPlayerWrapper wrapper, string url)
+    public void LoadVideo(VideoPlayerWrapper wrapper, NodeSO nodeData)
     {
         wrapper.gameObject.SetActive(true);
 
+        wrapper.SetPlayNode(nodeData);
         VideoPlayer videoPlayer = wrapper.VideoPlayer;
         videoPlayer.source = VideoSource.Url;
-        videoPlayer.url = url;
+        videoPlayer.url = nodeData.VideoAdress;
 
         // 모바일/PC 하드웨어 가속 및 성능 최적화 옵션 켜기
         videoPlayer.skipOnDrop = true; // 프레임 드랍 발생 시 오디오 동기화를 위해 프레임 스킵

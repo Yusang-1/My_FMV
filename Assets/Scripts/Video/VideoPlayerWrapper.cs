@@ -10,6 +10,7 @@ public class VideoPlayerWrapper : MonoBehaviour
     public event Action<VideoPlayerWrapper> OnVideoPlayerUnused;
 
     public VideoPlayer VideoPlayer { get; private set; }
+    private NodeSO nodeData;
     [SerializeField] private RawImage rawImage;
 
     private void Awake()
@@ -37,6 +38,14 @@ public class VideoPlayerWrapper : MonoBehaviour
         OnVideoPlayerUnused?.Invoke(this);
     }
 
+    /// <summary>
+    /// 로드할 때 이후 재생할 nodeData를 저장
+    /// </summary>    
+    public void SetPlayNode(NodeSO nodeData)
+    {
+        this.nodeData = nodeData;
+    }
+
     public void ActiveVideo()
     {
         gameObject.SetActive(true);
@@ -47,6 +56,18 @@ public class VideoPlayerWrapper : MonoBehaviour
         Debug.Log("Play Video");
         gameObject.SetActive(true);
         VideoPlayer.Play();
+
+        if (nodeData != null)
+        {
+            if (nodeData.VideoType == VideoType.Loop)
+            {
+                SetLoop(true);
+            }
+            else
+            {
+                SetLoop(false);
+            }
+        }
     }
 
     public void EndVideo()
@@ -83,12 +104,7 @@ public class VideoPlayerWrapper : MonoBehaviour
         rawImage.color = color;
     }
 
-    public void SetLoop(VideoType type)
-    {
-        VideoPlayer.isLooping = type == VideoType.Loop;
-    }
-
-    public void SetLoop(bool value)
+    private void SetLoop(bool value)
     {
         VideoPlayer.isLooping = value;
     }

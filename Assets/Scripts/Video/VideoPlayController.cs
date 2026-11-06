@@ -77,11 +77,8 @@ public class VideoPlayController : MonoBehaviour
             return;
         }
 
-        string address = nextNodeData.VideoAdress;
-        loader.LoadVideo(nextWrapper, address);
-        
-        // Type이 loop이면 loop으로 설정
-        nextWrapper.SetLoop(nextNodeData.VideoType);
+        // string address = nextNodeData.VideoAdress;
+        loader.LoadVideo(nextWrapper, nextNodeData);                
 
         // 현재 재생중인 player와 다음 player의 transition을 예약
         branchController.SetReservedNextNode(nextNodeData);
