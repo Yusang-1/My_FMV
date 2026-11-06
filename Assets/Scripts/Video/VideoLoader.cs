@@ -15,21 +15,12 @@ public class VideoLoader : MonoBehaviour
     {
         wrapper.gameObject.SetActive(true);
 
-        wrapper.SetPlayNode(nodeData);
-        VideoPlayer videoPlayer = wrapper.VideoPlayer;
-        videoPlayer.source = VideoSource.Url;
-        videoPlayer.url = nodeData.VideoAdress;
-
-        // 모바일/PC 하드웨어 가속 및 성능 최적화 옵션 켜기
-        videoPlayer.skipOnDrop = true; // 프레임 드랍 발생 시 오디오 동기화를 위해 프레임 스킵
-
-        BindEvents(videoPlayer);
+        wrapper.LoadVideo(nodeData);
+        
+        BindEvents(wrapper.VideoPlayer);
 
         // 영상 로딩(버퍼링) UI 켜고 준비 시작
-        if (loadingIndicatorUI != null) loadingIndicatorUI.SetActive(true);
-
-        Debug.Log("CloudFront 스트리밍 준비 시작...");
-        videoPlayer.Prepare();
+        if (loadingIndicatorUI != null) loadingIndicatorUI.SetActive(true);        
     }
 
     private void OnVideoPrepared(VideoPlayer source)
