@@ -1,5 +1,9 @@
-public class SubtitleData : ICSVParseData
+using System;
+
+public class SubtitleData : ICSVParseData, ITimeCheck
 {
+    private Action<ITimeCheck> endAction;
+
     public string ID;
     public float StartTime;
     public float EndTime;
@@ -16,4 +20,16 @@ public class SubtitleData : ICSVParseData
         Text_KR = datas[4];
         Text_EN = datas[5];
     }
+
+    public void SetEndAction(Action<ITimeCheck> endAction)
+    {
+        this.endAction = endAction;
+    }
+
+    public void EndTimeArrived()
+    {
+        endAction?.Invoke(this);
+    }
+
+    public float GetEndTime() => EndTime;
 }

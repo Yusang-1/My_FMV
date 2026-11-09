@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 
-public class ChoiceData : ICSVParseData
+public class ChoiceData : ICSVParseData, ITimeCheck
 {
+    private Action<ITimeCheck> endAction;
+
     public string ID;
     public float StartTime;
     public float Duration;
@@ -31,6 +34,18 @@ public class ChoiceData : ICSVParseData
             ChoiceIDs.Add(s);
         }
     }
+
+    public void SetEndAction(Action<ITimeCheck> endAction)
+    {
+        this.endAction = endAction;
+    }
+
+    public void EndTimeArrived()
+    {
+        endAction?.Invoke(this);
+    }
+
+    public float GetEndTime() => EndTime;
 }
 
 public enum ChoiceType

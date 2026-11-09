@@ -40,7 +40,7 @@ public class Manager : MonoBehaviour
     {
         uIController.OnTestStartRequested += videoController.OnPlay;
         uIController.InvokeChoiceAction += choiceActionDatas.Dispatch;
-        
+
         videoController.OnVideoPlayerChanged += videoTimer.SetVideoPlayer;
 
         subtitleController.OnStartShowSubtitleRequested += HandleShowSubtitle;
@@ -48,6 +48,7 @@ public class Manager : MonoBehaviour
         subtitleController.OnGetCurrentPlayerTimeRequest += videoController.GetCurrentPlayerTime;
         subtitleController.OnGetCurrentPlayerRequested += videoController.GetCurrentPlayer;
         subtitleController.OnGetNextSubtitleDataRequested += subtitleRuntimeContext.CurrentSubtitleDatas.GetSubtitleData;
+        subtitleController.OnStartTimeCheck += videoTimer.AddTimeCheckObject;
 
         subtitleLoader.OnParseSubtitleCompelete += subtitleRuntimeContext.SubtitleDatas.AddData;
 
@@ -58,6 +59,7 @@ public class Manager : MonoBehaviour
         choiceController.OnGetCurrentPlayerRequested += videoController.GetCurrentPlayer;
         choiceController.OnGetNextChoiceDataRequested += subtitleRuntimeContext.CurrentSubtitleDatas.GetChoiceData;
         choiceController.OnGetChoiceTextRequested += subtitleRuntimeContext.ChoiceTextDatas.GetData;
+        choiceController.OnStartTimeCheck += videoTimer.AddTimeCheckObject;
 
         choiceLoader.OnParseChoiceCompelete += subtitleRuntimeContext.ChoiceDatas.AddData;
 
@@ -71,7 +73,7 @@ public class Manager : MonoBehaviour
     {
         uIController.OnTestStartRequested -= videoController.OnPlay;
         uIController.InvokeChoiceAction -= choiceActionDatas.Dispatch;
-        
+
         videoController.OnVideoPlayerChanged -= videoTimer.SetVideoPlayer;
 
         subtitleController.OnStartShowSubtitleRequested -= HandleShowSubtitle;
@@ -79,6 +81,7 @@ public class Manager : MonoBehaviour
         subtitleController.OnGetCurrentPlayerTimeRequest -= videoController.GetCurrentPlayerTime;
         subtitleController.OnGetCurrentPlayerRequested -= videoController.GetCurrentPlayer;
         subtitleController.OnGetNextSubtitleDataRequested -= subtitleRuntimeContext.CurrentSubtitleDatas.GetSubtitleData;
+        subtitleController.OnStartTimeCheck -= videoTimer.AddTimeCheckObject;
 
         subtitleLoader.OnParseSubtitleCompelete -= subtitleRuntimeContext.SubtitleDatas.AddData;
 
@@ -89,6 +92,7 @@ public class Manager : MonoBehaviour
         choiceController.OnGetCurrentPlayerRequested -= videoController.GetCurrentPlayer;
         choiceController.OnGetNextChoiceDataRequested -= subtitleRuntimeContext.CurrentSubtitleDatas.GetChoiceData;
         choiceController.OnGetChoiceTextRequested -= subtitleRuntimeContext.ChoiceTextDatas.GetData;
+        choiceController.OnStartTimeCheck -= videoTimer.AddTimeCheckObject;
 
         choiceLoader.OnParseChoiceCompelete -= subtitleRuntimeContext.ChoiceDatas.AddData;
 

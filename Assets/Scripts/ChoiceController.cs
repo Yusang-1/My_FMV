@@ -14,6 +14,7 @@ public class ChoiceController : MonoBehaviour
     public event Action<ChoiceData> OnStartSetChoiceRequested;
     public event Action<string> OnRemoveChoiceRequested;
     public event Func<string, ChoiceTextData> OnGetChoiceTextRequested;
+    public event Action<ITimeCheck> OnStartTimeCheck;
 
     private readonly ChoiceShower choiceShower = new();
     private ChoiceData currentChoiceData;
@@ -24,6 +25,7 @@ public class ChoiceController : MonoBehaviour
         choiceShower.OnStartSetChoiceRequested += HandleStartSetChoice;
         choiceShower.OnRemoveChoiceRequested += HandleRemoveChoice;
         choiceShower.OnGetChoiceTextRequested += HandleGetChoiceText;
+        choiceShower.OnStartTimeCheck += HandleStartTimeCheck;
     }
 
     private void OnDisable()
@@ -32,13 +34,12 @@ public class ChoiceController : MonoBehaviour
         choiceShower.OnStartSetChoiceRequested -= HandleStartSetChoice;
         choiceShower.OnRemoveChoiceRequested -= HandleRemoveChoice;
         choiceShower.OnGetChoiceTextRequested -= HandleGetChoiceText;
+        choiceShower.OnStartTimeCheck -= HandleStartTimeCheck;
     }
 
     private void Update()
     {
         JudgeChoiceShowTime();
-
-        choiceShower.Update();
     }
 
     /// <summary>
@@ -122,7 +123,7 @@ public class ChoiceController : MonoBehaviour
             GetNextChoiceData(0);
         }
     }
-    
+
     /// <summary>
     /// 선택지가 선택되었을 때 호출
     /// </summary>
@@ -146,5 +147,9 @@ public class ChoiceController : MonoBehaviour
     private ChoiceTextData HandleGetChoiceText(string choiceID)
     {
         return OnGetChoiceTextRequested?.Invoke(choiceID);
+    }
+    private void HandleStartTimeCheck(ITimeCheck timeCheck)
+    {
+        OnStartTimeCheck?.Invoke(timeCheck);
     }
 }

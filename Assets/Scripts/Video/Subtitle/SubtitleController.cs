@@ -11,6 +11,7 @@ public class SubtitleController : MonoBehaviour
     // SubtitleShower 연결 event
     public event Action<SubtitleData> OnStartShowSubtitleRequested;
     public event Action<string> OnRemoveSubtitleRequested;
+    public event Action<ITimeCheck> OnStartTimeCheck;
 
     private readonly SubtitleShower subtitleShower = new();
     private SubtitleData currentSubtitleData;
@@ -19,19 +20,19 @@ public class SubtitleController : MonoBehaviour
     {
         subtitleShower.OnStartShowSubtitleRequested += HandleStartShowSubtitle;
         subtitleShower.OnRemoveSubtitleRequested += HandleRemoveSubtitle;
+        subtitleShower.OnStartTimeCheck += HandleStartTimeCheck;
     }
 
     private void OnDisable()
     {
         subtitleShower.OnStartShowSubtitleRequested -= HandleStartShowSubtitle;
         subtitleShower.OnRemoveSubtitleRequested -= HandleRemoveSubtitle;
+        subtitleShower.OnStartTimeCheck -= HandleStartTimeCheck;
     }
 
     private void Update()
     {
         JudgeSubtitle();
-
-        subtitleShower.Update();
     }
 
     private void JudgeSubtitle()
@@ -117,9 +118,12 @@ public class SubtitleController : MonoBehaviour
     {
         OnRemoveSubtitleRequested?.Invoke(id);
     }
-
     private void HandleStartShowSubtitle(SubtitleData subtitleData)
     {
         OnStartShowSubtitleRequested?.Invoke(subtitleData);
+    }
+    private void HandleStartTimeCheck(ITimeCheck timeCheck)
+    {
+        OnStartTimeCheck?.Invoke(timeCheck);
     }
 }

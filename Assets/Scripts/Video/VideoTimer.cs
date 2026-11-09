@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Video;
 using System.Collections.Generic;
+using System;
 
 public class VideoTimer : MonoBehaviour
 {
@@ -8,9 +9,6 @@ public class VideoTimer : MonoBehaviour
 
     private readonly HashSet<ITimeCheck> timeCheckList = new(10);
     private readonly List<ITimeCheck> removeList = new(5);
-
-    // 시간 체크해야되는 것들 처리
-    // startTime, endTime
 
     private void Update()
     {
@@ -72,4 +70,5 @@ public interface ITimeCheck
 {
     public float GetEndTime();
     public void EndTimeArrived();
+    public void SetEndAction(Action<ITimeCheck> endAction);
 }

@@ -1,6 +1,5 @@
 using UnityEngine.Video;
 using System;
-using System.Collections.Generic;
 
 public class ChoiceShower
 {
@@ -9,46 +8,20 @@ public class ChoiceShower
     public event Action<ChoiceData> OnStartSetChoiceRequested;
     public event Action<string> OnRemoveChoiceRequested;
     public event Func<string, ChoiceTextData> OnGetChoiceTextRequested;
+    public event Action<ITimeCheck> OnStartTimeCheck;
 
-    private readonly Dictionary<VideoPlayer, List<ChoiceData>> choiceDatasByPlayer = new(videoPlayerOnceLimit);
-    private readonly Dictionary<ChoiceData, VideoPlayer> playerByChoiceData = new(choiceOnceLimit);
-    private readonly HashSet<ChoiceData> removeReservedData = new(choiceOnceLimit);
+    private Action<ITimeCheck> OnSubtitleEnd;
 
-    private const int choiceOnceLimit = 3;
-    private const int videoPlayerOnceLimit = 2;
-
-    public void Update()
+    public void Initialize()
     {
-        CheckChoiceEnd();
-    }
-
-    private void CheckChoiceEnd()
-    {
-        foreach (var pair in choiceDatasByPlayer)
-        {
-            float time = (float)pair.Key.time;
-            List<ChoiceData> choiceList = pair.Value;
-
-            foreach (var data in choiceList)
-            {
-                if (time >= data.EndTime)
-                {
-                    RemoveChoice(data);
-                }
-            }
-        }
-        RemoveCollection();
+        OnSubtitleEnd = RemoveChoice;
     }
 
     public void StartShowChoice(VideoPlayer player, ChoiceData data)
     {
-        if (!choiceDatasByPlayer.ContainsKey(player))
-        {
-            choiceDatasByPlayer.Add(player, new(choiceOnceLimit));
-        }
-
-        choiceDatasByPlayer[player].Add(data);
-        playerByChoiceData.Add(data, player);
+        // VideoTimer에 담아 종료 시점 체크
+        (data as ITimeCheck).SetEndAction(OnSubtitleEnd);
+        OnStartTimeCheck?.Invoke(data);
 
         // UIContainerSubtitleTotal에 자막 켜기 요청
         foreach (string choiceID in data.ChoiceIDs)
@@ -59,32 +32,10 @@ public class ChoiceShower
         }
     }
 
-    private void RemoveChoice(ChoiceData data)
+    private void RemoveChoice(ITimeCheck timeCheck)
     {
-        if (playerByChoiceData.ContainsKey(data))
-        {
-            ReserveRemoveCollection(data);
-        }
-
         // UIChoiceContainer에 해당 ID의 자막 종료 요청
+        ChoiceData data = timeCheck as ChoiceData;
         OnRemoveChoiceRequested?.Invoke(data.ID);
-    }
-
-    private void ReserveRemoveCollection(ChoiceData data)
-    {
-        removeReservedData.Add(data);
-    }
-
-    private void RemoveCollection()
-    {
-        foreach (var data in removeReservedData)
-        {
-            var player = playerByChoiceData[data];
-
-            choiceDatasByPlayer[player].Remove(data);
-            playerByChoiceData.Remove(data);
-        }
-
-        removeReservedData.Clear();
     }
 }
