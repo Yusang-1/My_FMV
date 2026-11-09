@@ -1,9 +1,12 @@
 using UnityEngine;
 using UnityEngine.Video;
+using System;
 using System.Collections;
 
 public class VideoPlayController : MonoBehaviour
 {
+    public event Action<VideoPlayer> OnVideoPlayerChanged;
+    
     private VideoPlayerPool pool;
     private VideoLoader loader;
     private JudgePreLoadVideo judgePreLoad;
@@ -12,6 +15,16 @@ public class VideoPlayController : MonoBehaviour
     private LoadedVideoController loadedVideoController;
 
     private VideoPlayer currentVideoPlayer;
+    
+    private VideoPlayer CurrentVideoPlayer
+    {
+        get => currentVideoPlayer;
+        set
+        {
+            currentVideoPlayer = value;
+            OnVideoPlayerChanged?.Invoke(value);
+        }
+    }
 
     public void Initialize(VideoPlayerPool pool, VideoLoader loader, JudgePreLoadVideo judgePreLoad,
         VideoTransition transition, BranchController branchController, LoadedVideoController loadedVideoController)
@@ -25,7 +38,7 @@ public class VideoPlayController : MonoBehaviour
     }
 
     /// <summary>
-    /// address를 load완료한 VideoPlayer가 loadedVideoController에 있다면 재생
+    /// nodeCode를 가진 node를 load한 VideoPlayer가 loadedVideoController에 있다면 재생
     /// </summary>
     public void PlayLoadedVideo(string nodeCode)
     {
@@ -33,7 +46,7 @@ public class VideoPlayController : MonoBehaviour
     }
 
     /// <summary>
-    /// address를 load완료한 VideoPlayer가 loadedVideoController에 있다면 재생
+    /// nodeCode를 가진 node를 load한 VideoPlayer가 loadedVideoController에 있다면 재생
     /// </summary>
     private IEnumerator WaitForLoadedPlayer(string nodeCode)
     {
@@ -44,7 +57,7 @@ public class VideoPlayController : MonoBehaviour
             isLoaded = loadedVideoController.TryGetLoadedPlayer(nodeCode, out VideoPlayer videoPlayer);
             if (isLoaded)
             {
-                currentVideoPlayer = videoPlayer;
+                CurrentVideoPlayer = videoPlayer;
                 if (pool.TryGetWrapper(videoPlayer, out VideoPlayerWrapper wrapper))
                 {
                     wrapper.PlayVideo();
@@ -87,7 +100,7 @@ public class VideoPlayController : MonoBehaviour
 
     public float GetCurrentPlayerTime()
     {
-        if (currentVideoPlayer == null)
+        if (CurrentVideoPlayer == null)
         {
             return -1;
         }

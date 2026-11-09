@@ -450,6 +450,7 @@ GameObject:
   - component: {fileID: 209648384}
   - component: {fileID: 209648389}
   - component: {fileID: 209648390}
+  - component: {fileID: 209648391}
   m_Layer: 0
   m_Name: Video Controller
   m_TagString: Untagged
@@ -602,6 +603,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8acf8cb453631b4458b10bc53ec57d57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &209648391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 209648380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 036c60db044d8da468742a8ff5cf15b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &321103286
@@ -1274,6 +1287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   videoController: {fileID: 209648388}
   transition: {fileID: 209648389}
+  videoTimer: {fileID: 209648391}
   subtitleController: {fileID: 859885553}
   subtitleLoader: {fileID: 859885555}
   choiceController: {fileID: 850716169}

@@ -4,8 +4,8 @@ using System;
 
 public class VideoController : MonoBehaviour
 {
-    public event Action OnFirstPlayVideo;
-
+    public event Action<VideoPlayer> OnVideoPlayerChanged;
+    
     [Header("[ Video ]")]
     [SerializeField] private VideoPlayerPool pool;
     [SerializeField] private VideoLoader loader;
@@ -50,6 +50,8 @@ public class VideoController : MonoBehaviour
         loader.OnVideoPreparedEvent += loadedVideoController.AddLoadedVideo;
 
         judgePreLoad.OnPreLoadRequired += videoPlayController.ReserveNextVideo;
+        
+        videoPlayController.OnVideoPlayerChanged += HandleVideoPlayerChanged;
 
         pool.BindEvents(branchController);
     }
@@ -59,6 +61,8 @@ public class VideoController : MonoBehaviour
         loader.OnVideoPreparedEvent -= loadedVideoController.AddLoadedVideo;
 
         judgePreLoad.OnPreLoadRequired -= videoPlayController.ReserveNextVideo;
+        
+        videoPlayController.OnVideoPlayerChanged -= HandleVideoPlayerChanged;
 
         pool.UnbindEvents(branchController);
     }
@@ -75,9 +79,7 @@ public class VideoController : MonoBehaviour
             loader.LoadVideo(wrapper, node);
         }
 
-        videoPlayController.PlayLoadedVideo(node.Code);
-
-        OnFirstPlayVideo?.Invoke();
+        videoPlayController.PlayLoadedVideo(node.Code);        
     }
 
     public float GetCurrentPlayerTime()
@@ -88,5 +90,10 @@ public class VideoController : MonoBehaviour
     public VideoPlayer GetCurrentPlayer()
     {
         return videoPlayController.GetCurrentPlayer();
+    }
+    
+    private void HandleVideoPlayerChanged(VideoPlayer player)
+    {
+        OnVideoPlayerChanged?.Invoke(player);
     }
 }

@@ -4,6 +4,7 @@ public class Manager : MonoBehaviour
 {
     [SerializeField] private VideoController videoController;
     [SerializeField] private VideoTransition transition;
+    [SerializeField] private VideoTimer videoTimer;
     [SerializeField] private SubtitleController subtitleController;
     [SerializeField] private SubtitleLoader subtitleLoader;
     [SerializeField] private ChoiceController choiceController;
@@ -39,6 +40,8 @@ public class Manager : MonoBehaviour
     {
         uIController.OnTestStartRequested += videoController.OnPlay;
         uIController.InvokeChoiceAction += choiceActionDatas.Dispatch;
+        
+        videoController.OnVideoPlayerChanged += videoTimer.SetVideoPlayer;
 
         subtitleController.OnStartShowSubtitleRequested += HandleShowSubtitle;
         subtitleController.OnRemoveSubtitleRequested += HandleRemoveSubtitle;
@@ -68,6 +71,8 @@ public class Manager : MonoBehaviour
     {
         uIController.OnTestStartRequested -= videoController.OnPlay;
         uIController.InvokeChoiceAction -= choiceActionDatas.Dispatch;
+        
+        videoController.OnVideoPlayerChanged -= videoTimer.SetVideoPlayer;
 
         subtitleController.OnStartShowSubtitleRequested -= HandleShowSubtitle;
         subtitleController.OnRemoveSubtitleRequested -= HandleRemoveSubtitle;
